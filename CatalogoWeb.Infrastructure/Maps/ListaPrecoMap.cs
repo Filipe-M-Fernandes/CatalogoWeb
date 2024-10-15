@@ -1,5 +1,4 @@
 using CatalogoWeb.Domain.Entidades;
-using CatalogoWeb.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

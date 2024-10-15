@@ -16,9 +16,6 @@ public class ClienteMap : IEntityTypeConfiguration<Cliente>
         builder.Property(c => c.cli_ativo).IsRequired();
         builder.Property(c => c.cli_datainclusao).IsRequired();
 
-        builder.HasOne(d => d.cbo)
-            .WithMany(p => p.clientes)
-            .HasForeignKey(d => d.cbo_id);
 
         builder.HasOne(d => d.pessoa)
             .WithMany(p => p.clientes)

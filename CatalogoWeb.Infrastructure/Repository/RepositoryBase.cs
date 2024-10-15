@@ -1,13 +1,11 @@
-using System.Linq.Expressions;
+using AutoMapper;
 using CatalogoWeb.Domain.Abstractions.Repositories;
 using CatalogoWeb.Domain.DTO;
 using CatalogoWeb.Domain.Entidades.Filtros;
-using CatalogoWeb.Infrastructure.Context;
 using CatalogoWeb.Infrastructure.Extensions;
-using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using CatalogWeb.Infrastructure.Context;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace CatalogoWeb.Infrastructure.Repositories;
 

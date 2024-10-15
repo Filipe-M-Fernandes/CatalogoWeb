@@ -1,5 +1,7 @@
 using CatalogoWeb.Api.Extensions;
 using CatalogWeb.Infrastructure.Context;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +16,17 @@ builder.Services.AddDbContext<CatalogoDbContext>(options => options.UseNpgsql(bu
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddControllers().AddValidators();
+
+builder.Services.AddControllers(options =>
+{
+    var policy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+
+    options.Filters.Add(new AuthorizeFilter(policy));
+});
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();

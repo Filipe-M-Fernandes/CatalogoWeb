@@ -1,9 +1,7 @@
-﻿using CatalogoWeb.Domain.Abstractions.Repositories;
+﻿using AutoMapper;
+using CatalogoWeb.Domain.Abstractions.Repositories;
 using CatalogoWeb.Domain.Entidades;
-using CatalogoWeb.Infrastructure.Context;
-using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+using CatalogWeb.Infrastructure.Context;
 
 namespace CatalogoWeb.Infrastructure.Repositories;
 public class ProdutoUnidadesRepository : RepositoryBase<ProdutoUnidade, long>, IProdutoUnidadesRepository
