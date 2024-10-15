@@ -1,4 +1,5 @@
-﻿using CatalogoWeb.Domain.Abstractions.Repositories;
+﻿using CatalogoWeb.Abstractions.Repositories;
+using CatalogoWeb.Domain.Abstractions.Repositories;
 using CatalogoWeb.Infrastructure.Repositories;
 using CatalogWeb.Infrastructure.Context;
 
@@ -46,6 +47,7 @@ namespace CatalogoWeb.Infrastructure
         IListaPrecoItemRepository ListaPrecoItem { get; }
         IPedidoRepository Pedido { get; }
         IPedidoItemRepository PedidoItem { get; }
+        IUsuarioAcessoRepository UsuarioAcesso { get; }
         Task CommitAsync();
     }
 }
