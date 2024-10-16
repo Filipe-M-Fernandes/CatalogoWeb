@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CatalogoWeb.Abstractions.Repositories;
 using CatalogoWeb.Domain.Abstractions.Repositories;
 using CatalogoWeb.Domain.Entidades;
 using CatalogoWeb.Infrastructure.Repositories;
@@ -49,6 +50,7 @@ namespace CatalogoWeb.Infrastructure.Context
         public IPedidoRepository Pedido { get; private set; }
         public IPedidoItemRepository PedidoItem { get; private set; }
         public IModalidadeGradeRepository ModalidadeGrade { get; private set; }
+        public IUsuarioAcessoRepository UsuarioAcesso { get; private set; }
 
         public UnitOfWork(CatalogoDbContext context, IMapper mapper)
         {
@@ -81,6 +83,7 @@ namespace CatalogoWeb.Infrastructure.Context
             UnidadeMedida = new UnidadeMedidaRepository(Context, mapper);
             Usuarios = new UsuarioRepository(Context, mapper);
             UnidadeMedida = new UnidadeMedidaRepository(Context, mapper);
+            UsuarioAcesso = new UsuarioAcessoRepository(Context, mapper);
             GrupoMenu = new GrupoMenuRepository(Context, mapper);
             ItemMenu = new ItemMenuRepository(Context, mapper);
             ModalidadeGrade = new ModalidadeGradeRepository(Context, mapper);

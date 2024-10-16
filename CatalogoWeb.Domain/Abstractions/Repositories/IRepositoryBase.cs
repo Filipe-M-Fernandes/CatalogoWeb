@@ -1,6 +1,6 @@
-using System.Linq.Expressions;
 using CatalogoWeb.Domain.DTO;
 using CatalogoWeb.Domain.Entidades.Filtros;
+using System.Linq.Expressions;
 
 namespace CatalogoWeb.Domain.Abstractions.Repositories;
 

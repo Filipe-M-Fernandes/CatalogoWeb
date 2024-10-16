@@ -1,5 +1,4 @@
 using CatalogoWeb.Domain.Entidades;
-using CatalogoWeb.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -11,7 +10,6 @@ public class CepMap : IEntityTypeConfiguration<Cep>
     {
         builder.ToTable("cep");
         builder.HasKey(p => p.cep_id);
-        builder.Property(c => c.cep_cep).IsRequired().HasMaxLength(CEP.CepMaxLength);
 
         builder.HasOne(d => d.cidade)
             .WithMany(p => p.ceps)

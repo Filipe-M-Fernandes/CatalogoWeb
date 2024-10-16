@@ -1,15 +1,7 @@
-﻿using CatalogoWeb.Domain.Abstractions.Repositories;
+﻿using AutoMapper;
+using CatalogoWeb.Domain.Abstractions.Repositories;
 using CatalogoWeb.Domain.Entidades;
-using CatalogoWeb.Infrastructure.Context;
-using AutoMapper;
-using iText.Commons.Actions.Contexts;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using CatalogWeb.Infrastructure.Context;
 
 namespace CatalogoWeb.Infrastructure.Repositories
 {

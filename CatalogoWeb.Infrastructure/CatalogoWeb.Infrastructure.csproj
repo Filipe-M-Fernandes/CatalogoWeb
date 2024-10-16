@@ -14,7 +14,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CatalogoWeb.Domain\CatalogoWeb.Domain.csproj" />
-    <ProjectReference Include="..\CatalogWeb.Domain\CatalogoWeb.Domain.csproj" />
   </ItemGroup>
 
 </Project>
