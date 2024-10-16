@@ -88,6 +88,7 @@ namespace CatalogoWeb.Infrastructure.Context
             TipoEndereco = new TipoEnderecoRepository(Context, mapper);
             Produto = new ProdutoRepository(Context, mapper);
             ProdutoEstoque = new ProdutoEstoqueRepository(Context, mapper);
+            ProdutoUnidades = new ProdutoUnidadesRepository(Context, mapper);
             ProdutoGrade = new ProdutoGradeRepository(Context, mapper);
             ListaPreco = new ListaPrecoRepository(Context, mapper);
             ListaPrecoItem = new ListaPrecoItemRepository(Context, mapper);
