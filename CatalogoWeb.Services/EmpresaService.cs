@@ -8,10 +8,11 @@ using System.Linq.Expressions;
 using CatalogoWeb.Core;
 using Microsoft.EntityFrameworkCore;
 using CatalogoWeb.Core.Extensions;
+using CatalogoWeb.Domain.Abstractions.Services;
 
 namespace CatalogoWeb.Services
 {
-    public class EmpresaService
+    public class EmpresaService:IEmpresaService
     {
         private IUnitOfWork _unitOfWork;
         private IMapper _mapper;
@@ -24,7 +25,7 @@ namespace CatalogoWeb.Services
             _dadosUsuarioLogado = dadosUsuarioLogado;
         }
 
-        public async Task<PagedModel<Empresa>> ListarEmpresasUsuario(FiltrosEmpresa filtros, string[] expand, PagedParams paginacao)
+        public async Task<PagedModel<Empresa>> ListarEmpresasUsuario(FiltrosEmpresa filtros, PagedParams paginacao)
         {
             long codigoUsuarioLogado = _dadosUsuarioLogado.IdUsuario();
             var filtroQuery = MontarFiltroEmpresas(filtros);

@@ -8,10 +8,11 @@ using CatalogoWeb.Infrastructure.Context;
 using CatalogoWeb.Core;
 using System.Linq.Expressions;
 using CatalogoWeb.Core.Extensions;
+using CatalogoWeb.Domain.Abstractions.Services;
 
 namespace CatalogoWeb.Services
 {
-    public class LocalService
+    public class LocalService: ILocalService
     {
         private IUnitOfWork _unitOfWork;
         private IMapper _mapper;
@@ -23,7 +24,7 @@ namespace CatalogoWeb.Services
             _dadosUsuarioLogado = dadosUsuarioLogado;
         }
 
-        public async Task<PagedModel<Local>> ListarLocalUsuario(FiltrosLocal filtros, string[] expand, PagedParams paginacao)
+        public async Task<PagedModel<Local>> ListarLocalUsuario(FiltrosLocal filtros, PagedParams paginacao)
         {
             var filtro = MontarFiltroLocais(filtros);
             if (filtros.idUser != 0)

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CatalogoWeb.Core;
 using CatalogoWeb.Core.DadosUsuarioLogado;
+using CatalogoWeb.Domain.Abstractions.Services;
 using CatalogoWeb.Domain.DTO;
 using CatalogoWeb.Domain.Entidades.Filtros;
 using CatalogoWeb.Domain.Enuns;
@@ -9,7 +10,7 @@ using CatalogoWeb.Infrastructure.Data;
 
 namespace CatalogoWeb.Services
 {
-    public class ProdutoService
+    public class ProdutoService : IProdutoService
     {
         private IUnitOfWork _unitOfWork;
         private IMapper _mapper;
@@ -148,7 +149,7 @@ namespace CatalogoWeb.Services
                         from ListaPrecoItem lpi
                         inner join Produto pro on (lpi.pro_id = pro.pro_id)
                         inner join ListaPreco lpc ON(lpc.emp_id = pro.emp_id and lpi.ltp_id = @CodigoListaPreco) -- lpi.ltp_id AND lpc.ltp_principal = true and lpc.ltp_ativa = true)
-                        WHERE pro.emp_id =   @CodigoEmpresa  and pro.pro_usagrade = true and lpi.prg_id is not null ";
+                        WHERE pro.emp_id = @CodigoEmpresa  and pro.pro_usagrade = true and lpi.prg_id is not null ";
             if (filtros.PrecoMinimo >= 0 && filtros.PrecoMinimo != null)
             {
                 sql += "and lpi_valorvenda >= (  @precoMinimo )::decimal ";
@@ -161,9 +162,8 @@ namespace CatalogoWeb.Services
                         ),
                         produtos as (
                         SELECT DISTINCT pro.pro_id, pro.pro_descricao, pro.pro_datainclusao, sgp.sgp_id, sgp.sgp_nome, grp.gru_id, grp.gru_nome, 
-                        mar.mar_id, mar.mar_nome, pis.pis_id,pis.pis_descricao, ncm.ncm_id, ncm.ncm_descricao, ncm.ncm_codigo, ncm.cip_saida, 
-                        tpi.tpi_id, tpi.tpi_descricao,ump.ump_id, ump.ump_descricao, ump.ump_casasdecimais, csv1.csv_id, csv1.csv_descricao,
-                        com.orm_id, com.orm_descricao, nat.nat_id, nat.nat_descricao, pro.pro_codigo, pro.pro_ean, pro.pro_codigoetiqueta,
+                        mar.mar_id, mar.mar_nome, ncm.ncm_id, ncm.ncm_descricao, ncm.ncm_codigo, ncm.cip_saida, ump.ump_id, ump.ump_descricao,
+                        ump.ump_casasdecimais, pro.pro_codigo, pro.pro_ean, pro.pro_codigoetiqueta, pro.pro_referencia, pro.pro_modelo,
                         pro.pro_referencia, pro.pro_modelo, pro.pro_produto, pro.pro_servico, pro.pro_materiaprima, pro.pro_usabalanca, 
                         pro.pro_ativo, pro.pro_kitcomposicao, pro.pro_observacao, pro.pro_fci, pro.cen_id,pro.pro_pesoliquido,pro.pro_pesobruto,
                         pro.pro_controlelote, pro.pro_usagrade,
@@ -174,13 +174,8 @@ namespace CatalogoWeb.Services
                         left join cte_produtoprecograde pg on (pg.pro_id = pro.pro_id)
                         LEFT JOIN subgrupo sgp ON(pro.sgp_id = sgp.sgp_id)
                         LEFT JOIN marca mar ON (pro.mar_id = mar.mar_id)
-                        LEFT JOIN tributacaopiscofins pis ON(pro.pis_id = pis.pis_id) 
                         LEFT JOIN ncm ON(pro.ncm_id = ncm.ncm_id)
-                        LEFT JOIN tipoprodutosped tpi ON(pro.tpi_id = tpi.tpi_id)
                         LEFT JOIN unidademedida ump ON(pro.ump_id = ump.ump_id)
-                        LEFT JOIN servicolc116 csv1 ON(pro.csv_id = csv1.csv_id)
-                        LEFT JOIN cstorigemmercadoria com ON(pro.orm_id = com.orm_id)
-                        LEFT JOIN naturezareceitaefd nat ON(pis.nat_id = nat.nat_id)
                         LEFT JOIN grupo grp ON(grp.gru_id = pro.gru_id)
                         LEFT JOIN produtograde prg ON(prg.pro_id = pro.pro_id)
                         WHERE pro.emp_id =   @CodigoEmpresa ";
@@ -224,7 +219,7 @@ namespace CatalogoWeb.Services
             {
                 sql += " and pro.pro_ativo = false";
             }
-            
+
             sql += ")";
             sql += @" select *
                         from produtos pro
@@ -241,15 +236,14 @@ namespace CatalogoWeb.Services
             {
                 CodigoEmpresa = _dadosUsuarioLogado.CodigoEmpresa(),
                 ProdutoId = ProdutoId,
-                
+
                 CodigoListaPreco = _codigoListaPreco,
             };
 
-            string sql = @$" SELECT produto.*, subgrupo.sgp_id, subgrupo.sgp_nome, grupo.gru_id, grupo.gru_nome, marca.mar_id, marca.mar_nome, tributacaopiscofins.pis_id,
-                                tributacaopiscofins.pis_descricao, ncm.ncm_id, ncm.ncm_descricao,ncm.ncm_ativo, ncm.ncm_codigo, ncm.cip_saida, tipoprodutosped.tpi_id, tipoprodutosped.tpi_descricao,
-                                unidademedida.ump_id, unidademedida.ump_descricao, unidademedida.ump_casasdecimais, servicolc116.csv_id, servicolc116.csv_descricao,
-                                cstorigemmercadoria.orm_id, cstorigemmercadoria.orm_descricao, naturezareceitaefd.nat_id, naturezareceitaefd.nat_descricao, ListaPrecoItem.lpi_valorvenda,
-                                produtotabelacbenef.cbf_id, icmsufproduto.icm_id,tabelaanp.anp_codigo,produtocombustivel.*, produtounidade.pru_id,produtounidade.pru_quantidade,
+            string sql = @$" SELECT produto.*, subgrupo.sgp_id, subgrupo.sgp_nome, grupo.gru_id, grupo.gru_nome, marca.mar_id, marca.mar_nome, ncm.ncm_id, ncm.ncm_descricao,
+                                ncm.ncm_ativo, ncm.ncm_codigo, ncm.cip_saida, tipoprodutosped.tpi_id, tipoprodutosped.tpi_descricao,
+                                unidademedida.ump_id, unidademedida.ump_descricao, unidademedida.ump_casasdecimais, ListaPrecoItem.lpi_valorvenda,
+                                produtounidade.pru_id,produtounidade.pru_quantidade,
                                 produtounidade.ump_id as emb_ump_id
                                 FROM produto
                                 LEFT JOIN subgrupo ON(produto.sgp_id = subgrupo.sgp_id)
@@ -258,12 +252,7 @@ namespace CatalogoWeb.Services
                                 LEFT JOIN ncm ON(produto.ncm_id = ncm.ncm_id)
                                 LEFT JOIN tipoprodutosped ON(produto.tpi_id = tipoprodutosped.tpi_id)
                                 LEFT JOIN unidademedida ON(produto.ump_id = unidademedida.ump_id)
-                                LEFT JOIN servicolc116 ON(produto.csv_id = servicolc116.csv_id)
-                                LEFT JOIN cstorigemmercadoria ON(produto.orm_id = cstorigemmercadoria.orm_id)
-                                LEFT JOIN naturezareceitaefd ON(tributacaopiscofins.nat_id = naturezareceitaefd.nat_id)
                                 LEFT JOIN grupo ON(grupo.gru_id = produto.gru_id)
-                                LEFT JOIN tabelaanp ON(tabelaanp.anp_id = produto.anp_id)
-                                LEFT JOIN produtocombustivel ON(produtocombustivel.pro_id = produto.pro_id)
                                 LEFT JOIN produtounidade ON(produtounidade.pro_id = produto.pro_id)
                                 inner JOIN ListaPrecoItem ON(ListaPrecoItem.pro_id = produto.pro_id AND ListaPrecoItem.ltp_id = @CodigoListaPreco) 
                                 WHERE produto.emp_id = @CodigoEmpresa and produto.pro_id = @ProdutoId ";
@@ -306,20 +295,19 @@ namespace CatalogoWeb.Services
                 CodigoListaPreco = _codigoListaPreco,
             };
 
-            string sql = $@"with cte_produtopreco as (
+            string sql = $@" with cte_produtopreco as (
                         select pro.pro_id, max(coalesce(lpi_valorvenda,0)) as PrecoVendaMinimo, max(coalesce(lpi_valorvenda,0)) as PrecoVendaMaximo
                         from ListaPrecoItem as lpi 
                         inner join Produto pro on (lpi.pro_id = pro.pro_id)
                         inner join ListaPreco as lpc ON(lpc.emp_id = pro.emp_id and lpi.ltp_id = @CodigoListaPreco) --lpi.ltp_id AND lpc.ltp_principal = true and lpc.ltp_ativa = true)
-                        --inner join ListaPreco as lpc ON(lpc.emp_id = pro.emp_id and lpc.ltp_id = lpi.ltp_id AND lpc.ltp_principal = true and lpc.ltp_ativa = true)
                         WHERE pro.emp_id =   @CodigoEmpresa  and pro.pro_usagrade = false ";
             if (filtros.PrecoMinimo >= 0 && filtros.PrecoMinimo != null)
             {
-                sql += "and lpi_valorvenda >= (  @precoMinimo )::decimal ";
+                sql += " and lpi_valorvenda >= (  @precoMinimo )::decimal ";
             }
             if (filtros.PrecoMinimo > 0 && filtros.PrecoMaximo != null)
             {
-                sql += "and lpi_valorvenda <= (  @precoMaximo )::decimal ";
+                sql += " and lpi_valorvenda <= (  @precoMaximo )::decimal ";
             }
             sql += @"  group by pro.pro_id
                         ), 
@@ -328,15 +316,14 @@ namespace CatalogoWeb.Services
                         from ListaPrecoItem lpi
                         inner join Produto pro on (lpi.pro_id = pro.pro_id)
                         inner join ListaPreco as lpc ON(lpc.emp_id = pro.emp_id and lpi.ltp_id = @CodigoListaPreco) --lpi.ltp_id AND lpc.ltp_principal = true and lpc.ltp_ativa = true)
-                        --inner join ListaPreco lpc ON(lpc.emp_id = pro.emp_id and lpc.ltp_id = lpi.ltp_id AND lpc.ltp_principal = true and lpc.ltp_ativa = true)
                         WHERE pro.emp_id =   @CodigoEmpresa  and pro.pro_usagrade = true and lpi.prg_id is not null ";
             if (filtros.PrecoMinimo > 0 && filtros.PrecoMinimo != null)
             {
-                sql += "and lpi_valorvenda >= (  @precoMinimo )::decimal ";
+                sql += " and lpi_valorvenda >= (  @precoMinimo )::decimal ";
             }
             if (filtros.PrecoMaximo > 0 && filtros.PrecoMaximo != null)
             {
-                sql += "and lpi_valorvenda <= (  @precoMaximo )::decimal ";
+                sql += " and lpi_valorvenda <= (  @precoMaximo )::decimal ";
             }
             sql += @"  group by pro.pro_id
                         ),
@@ -345,8 +332,8 @@ namespace CatalogoWeb.Services
                         mar.mar_id, mar.mar_nome, pis.pis_id,pis.pis_descricao, ncm.ncm_id, ncm.ncm_descricao, ncm.ncm_codigo, ncm.cip_saida, 
                         tpi.tpi_id, tpi.tpi_descricao,ump.ump_id, ump.ump_descricao, ump.ump_casasdecimais, csv1.csv_id, csv1.csv_descricao,
                         com.orm_id, com.orm_descricao, nat.nat_id, nat.nat_descricao, pro.pro_codigo, pro.pro_ean, pro.pro_codigoetiqueta,
-                        pro.pro_referencia, pro.pro_modelo, pro.pro_produto, pro.pro_servico, pro.pro_materiaprima, pro.pro_usabalanca, 
-                        pro.pro_ativo, pro.pro_kitcomposicao, pro.pro_observacao, pro.pro_fci, pro.cen_id,pro.pro_pesoliquido,pro.pro_pesobruto,
+                        pro.pro_referencia, pro.pro_modelo,
+                        pro.pro_ativo,pro.pro_observacao, pro.pro_pesoliquido,pro.pro_pesobruto,
                         (case when pro.pro_usagrade = true then pg.PrecoVendaMinimo else pp.PrecoVendaMinimo end) as PrecoVendaMinimo,
                         (case when pro.pro_usagrade = true then pg.PrecoVendaMaximo else pp.PrecoVendaMaximo end) as PrecoVendaMaximo
                         FROM produto pro
@@ -354,13 +341,8 @@ namespace CatalogoWeb.Services
                         left join cte_produtoprecograde pg on (pg.pro_id = pro.pro_id)
                         LEFT JOIN subgrupo sgp ON(pro.sgp_id = sgp.sgp_id)
                         LEFT JOIN marca mar ON (pro.mar_id = mar.mar_id)
-                        LEFT JOIN tributacaopiscofins pis ON(pro.pis_id = pis.pis_id) 
                         LEFT JOIN ncm ON(pro.ncm_id = ncm.ncm_id)
-                        LEFT JOIN tipoprodutosped tpi ON(pro.tpi_id = tpi.tpi_id)
                         LEFT JOIN unidademedida ump ON(pro.ump_id = ump.ump_id)
-                        LEFT JOIN servicolc116 csv1 ON(pro.csv_id = csv1.csv_id)
-                        LEFT JOIN cstorigemmercadoria com ON(pro.orm_id = com.orm_id)
-                        LEFT JOIN naturezareceitaefd nat ON(pis.nat_id = nat.nat_id)
                         LEFT JOIN grupo grp ON(grp.gru_id = pro.gru_id)
                         LEFT JOIN produtograde prg ON(prg.pro_id = pro.pro_id)
                         WHERE pro.emp_id = @CodigoEmpresa ";

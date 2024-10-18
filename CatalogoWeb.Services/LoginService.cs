@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
 using CatalogoWeb.Core;
+using CatalogoWeb.Domain.Abstractions.Services;
 using CatalogoWeb.Domain.DTO;
 using CatalogoWeb.Domain.Entidades;
 using CatalogoWeb.Infrastructure;
 
 namespace CatalogoWeb.Services
 {
-    public class LoginService
+    public class LoginService:ILoginService
     {
         private IUnitOfWork _unitOfWork;
         private IMapper _mapper;
