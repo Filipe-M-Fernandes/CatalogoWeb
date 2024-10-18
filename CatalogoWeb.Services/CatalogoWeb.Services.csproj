@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CatalogoWeb.Core\CatalogoWeb.Core.csproj" />
+    <ProjectReference Include="..\CatalogoWeb.Infrastructure\CatalogoWeb.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

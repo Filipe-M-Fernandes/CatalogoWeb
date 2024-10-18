@@ -26,5 +26,35 @@
 
             return texto;
         }
+
+        public static string RetornaNumeros(string texto)
+        {
+            if (string.IsNullOrEmpty(texto))
+            {
+                return "";
+            }
+            else
+            {
+                var numeros = new String(texto.Where(Char.IsDigit).ToArray());
+                return string.IsNullOrEmpty(numeros) ? null : numeros;
+            }
+        }
+
+        public static long? RetornaNumero(string texto)
+        {
+            if (string.IsNullOrEmpty(texto))
+            {
+                return null;
+            }
+            else
+            {
+                var numeros = new String(texto.Where(Char.IsDigit).ToArray());
+                return string.IsNullOrEmpty(numeros) ? null : Convert.ToInt64(numeros);
+            }
+        }
+        public static string RetornaLetras(string texto)
+        {
+            return string.IsNullOrEmpty(texto) ? "" : new String(texto.Where(Char.IsLetter).ToArray()).ToUpper();
+        }
     }
 }
