@@ -7,7 +7,7 @@ using CatalogoWeb.Infrastructure;
 
 namespace CatalogoWeb.Services
 {
-    public class LoginService:ILoginService
+    public class LoginService : ILoginService
     {
         private IUnitOfWork _unitOfWork;
         private IMapper _mapper;

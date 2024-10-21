@@ -12,13 +12,13 @@ using CatalogoWeb.Domain.Abstractions.Services;
 
 namespace CatalogoWeb.Services
 {
-    public class EmpresaService:IEmpresaService
+    public class EmpresaService : IEmpresaService
     {
         private IUnitOfWork _unitOfWork;
         private IMapper _mapper;
         private readonly IDadosUsuarioLogado _dadosUsuarioLogado;
 
-        public EmpresaService(IUnitOfWork unitOfWork,IMapper mapper, IDadosUsuarioLogado dadosUsuarioLogado)
+        public EmpresaService(IUnitOfWork unitOfWork, IMapper mapper, IDadosUsuarioLogado dadosUsuarioLogado)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -41,7 +41,7 @@ namespace CatalogoWeb.Services
             if (filtros.Ativo.HasValue) expr = expr.And(x => x.emp_ativa == filtros.Ativo.Value);
             if (filtros.NomeFantasia.HasValue()) expr = expr.And(x => x.emp_nomefantasia.ToLower().Contains(filtros.NomeFantasia.ToLower()));
             if (filtros.RazaoSocial.HasValue()) expr = expr.And(x => x.emp_razaosocial.ToLower().Contains(filtros.RazaoSocial.ToLower()));
-            if (filtros.Filtro.HasValue()) expr = expr.And(x =>x.emp_nomefantasia.ToLower().Contains(filtros.Filtro.ToLower()) || x.emp_razaosocial.ToLower().Contains(filtros.Filtro.ToLower()));
+            if (filtros.Filtro.HasValue()) expr = expr.And(x => x.emp_nomefantasia.ToLower().Contains(filtros.Filtro.ToLower()) || x.emp_razaosocial.ToLower().Contains(filtros.Filtro.ToLower()));
 
             return expr;
         }

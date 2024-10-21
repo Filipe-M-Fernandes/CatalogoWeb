@@ -14,7 +14,7 @@ string allowSpecificOrigins = "_allowSpecificOrigins";
 builder.Services.AddDefaultCorsPolicy(allowSpecificOrigins);
 builder.Services.AddDbContext<CatalogoDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddControllers();
+builder.Services.RegistrarApplicationServices();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 

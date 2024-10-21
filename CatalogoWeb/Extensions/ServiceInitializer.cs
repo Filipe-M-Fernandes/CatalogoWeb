@@ -1,6 +1,14 @@
-﻿using CatalogoWeb.Domain.Abstractions.Repositories;
+﻿using CatalogoWeb.Core.DadosUsuarioLogado;
+using CatalogoWeb.Domain.Abstractions.Repositories;
+using CatalogoWeb.Domain.Abstractions.Services;
+using CatalogoWeb.Domain.Profiles;
+using CatalogoWeb.Infrastructure;
+using CatalogoWeb.Infrastructure.Context;
 using CatalogoWeb.Infrastructure.Repositories;
+using CatalogoWeb.Services;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using System.ComponentModel.Design;
+using XAct.IO;
 
 namespace CatalogoWeb.Api.Extensions
 {
@@ -15,13 +23,13 @@ namespace CatalogoWeb.Api.Extensions
         }
         private static void RegistrarRepositorios(IServiceCollection services)
         {
-            services.TryAddScoped<IBairroRepository, BairroRepository>();     
-            services.TryAddScoped<ICepRepository, CepRepository>();    
+            services.TryAddScoped<IBairroRepository, BairroRepository>();
+            services.TryAddScoped<ICepRepository, CepRepository>();
             services.TryAddScoped<IClienteRepository, ClienteRepository>();
-            services.TryAddScoped<ICidadeRepository, CidadeRepository>();       
+            services.TryAddScoped<ICidadeRepository, CidadeRepository>();
             services.TryAddScoped<IEmpresaRepository, EmpresaRepository>();
-            services.TryAddScoped<IEstadoRepository, EstadoRepository>();         
-            services.TryAddScoped<IGrupoProdutoRepository, GrupoProdutoRepository>();  
+            services.TryAddScoped<IEstadoRepository, EstadoRepository>();
+            services.TryAddScoped<IGrupoProdutoRepository, GrupoProdutoRepository>();
             services.TryAddScoped<IListaPrecoClienteRepository, ListaPrecoClienteRepository>();
             services.TryAddScoped<IListaPrecoRepository, ListaPrecoRepository>();
             services.TryAddScoped<IListaPrecoItemRepository, ListaPrecoItemRepository>();
@@ -58,6 +66,21 @@ namespace CatalogoWeb.Api.Extensions
 
         private static void RegistrarServicos(IServiceCollection services)
         {
+            services.AddScoped<IDadosUsuarioLogado, DadosUsuarioLogado>();
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.TryAddScoped<IEmpresaService, EmpresaService>();
+            services.TryAddScoped<ILocalService, LocalService>();
+            services.TryAddScoped<IMarcaService, MarcaService>();
+            services.TryAddScoped<IEnviaEmailService, EnviaEmailService>();
+            services.TryAddScoped<ILoginService, LoginService>();
+
+            services.TryAddScoped<ISubGrupoService, SubGrupoService>();
+
+            services.TryAddScoped<IClienteService, ClienteService>();
+
+            services.TryAddScoped<IProdutoService, ProdutoService>();
+
         }
 
         private static void RegistrarAutoMapper(IServiceCollection services)

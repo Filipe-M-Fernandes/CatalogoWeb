@@ -1,17 +1,18 @@
 ﻿using AutoMapper;
+using CatalogoWeb.Core;
 using CatalogoWeb.Core.DadosUsuarioLogado;
+using CatalogoWeb.Core.Extensions;
+using CatalogoWeb.Domain.Abstractions.Services;
 using CatalogoWeb.Domain.DTO;
-using CatalogoWeb.Domain.Entidades.Filtros;
+using CatalogoWeb.Domain.DTO.Command.Grupo;
 using CatalogoWeb.Domain.Entidades;
+using CatalogoWeb.Domain.Entidades.Filtros;
 using CatalogoWeb.Infrastructure;
 using System.Linq.Expressions;
-using CatalogoWeb.Core;
-using CatalogoWeb.Core.Extensions;
-using CatalogoWeb.Domain.DTO.Command.Grupo;
 
 namespace CatalogoWeb.Services
 {
-    public class GrupoService
+    public class GrupoService: IGrupoService
     {
         private IUnitOfWork _unitOfWork;
         private readonly IDadosUsuarioLogado _dadosUsuarioLogado;
@@ -24,7 +25,7 @@ namespace CatalogoWeb.Services
             _mapper = mapper;
         }
 
-        public Task<PagedModel<Grupo>> Buscar(FiltrosGrupoProduto filtros, string[] expand, PagedParams paginacao)
+        public Task<PagedModel<Grupo>> Buscar(FiltrosGrupoProduto filtros, PagedParams paginacao)
         {
             var filtroQuery = MontarFiltro(filtros);
             return _unitOfWork.GrupoProduto.FindAsync(filtroQuery, paginacao);

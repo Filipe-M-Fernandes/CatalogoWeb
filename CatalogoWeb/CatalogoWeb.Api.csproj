@@ -17,6 +17,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
     <PackageReference Include="Npgsql" Version="8.0.4" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.8" />
@@ -27,6 +28,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CatalogoWeb.Core\CatalogoWeb.Core.csproj" />
     <ProjectReference Include="..\CatalogoWeb.Infrastructure\CatalogoWeb.Infrastructure.csproj" />
+    <ProjectReference Include="..\CatalogoWeb.Services\CatalogoWeb.Services.csproj" />
   </ItemGroup>
 
 </Project>

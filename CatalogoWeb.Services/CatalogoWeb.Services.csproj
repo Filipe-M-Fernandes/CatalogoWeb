@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MailKit" Version="4.8.0" />
+    <PackageReference Include="MassTransit" Version="8.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\CatalogoWeb.Core\CatalogoWeb.Core.csproj" />
     <ProjectReference Include="..\CatalogoWeb.Infrastructure\CatalogoWeb.Infrastructure.csproj" />
   </ItemGroup>
