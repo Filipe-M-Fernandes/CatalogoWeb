@@ -16,12 +16,14 @@ namespace CatalogoWeb.Services
         private IDadosUsuarioLogado _dadosUsuarioLogado;
         private IMapper _mapper;
         private IAvatarService _avatarService;
-        public UsuarioService(IUnitOfWork unitOfWork, IDadosUsuarioLogado dadosUsuarioLogado,  IMapper mapper, IAvatarService avatarService)
+        private IEnviaEmailService _enviaEmailService;
+        public UsuarioService(IUnitOfWork unitOfWork, IDadosUsuarioLogado dadosUsuarioLogado, IMapper mapper, IAvatarService avatarService, IEnviaEmailService enviaEmailService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _avatarService = avatarService;
             _dadosUsuarioLogado = dadosUsuarioLogado;
+            _enviaEmailService = enviaEmailService;
         }
 
         public async Task<UsuarioDTO> IncluirAsync(Usuario entidade)
@@ -49,9 +51,9 @@ namespace CatalogoWeb.Services
 
             UsuarioDTO retorno = await IncluirAsync(entidade);
 
-           // if (dados.listaPermissoesPaginas != null) await _permissaoUsuario.AtribuirPermissoesParaUsuario(retorno.usu_id, dados.listaPermissoesPaginas);
+            // if (dados.listaPermissoesPaginas != null) await _permissaoUsuario.AtribuirPermissoesParaUsuario(retorno.usu_id, dados.listaPermissoesPaginas);
 
-            await EnviarEmailAtivacaoContaUsuarioGestorWeb(retorno.usu_email, retorno.usu_nome);
+            await EnviarEmailAtivacaoUsuario(retorno.usu_email, retorno.usu_nome);
 
             return retorno;
         }
@@ -83,16 +85,10 @@ namespace CatalogoWeb.Services
             return senha;
         }
 
-        private async Task EnviarEmailAtivacaoContaUsuarioGestorWeb(string email, string nome)
+        private async Task EnviarEmailAtivacaoUsuario(string email, string nome)
         {
-#if DEBUG
-            //string linkAtivacaoContaUsuario = "http://localhost:3000";
-            string linkAtivacaoContaUsuario = "https://hom.gestorweb.com.br";
-#endif
-#if !DEBUG
-            string linkAtivacaoContaUsuario = "https://app.gestorweb.com.br";
-#endif
-            linkAtivacaoContaUsuario += "/ativar-novo-usuario#/" + Convert.ToBase64String(Encoding.UTF8.GetBytes(email + "|" + nome));
+
+            string linkAtivacaoContaUsuario = "http://localhost:3000/ativar-novo-usuario#/" + Convert.ToBase64String(Encoding.UTF8.GetBytes(email + "|" + nome));
 
             #region Conteúdo do email em HTML
             string conteudoCorpoEmail = $@"
@@ -100,7 +96,7 @@ namespace CatalogoWeb.Services
 <html xmlns=""http://www.w3.org/1999/xhtml"">
     <head>
         <meta http-equiv=""Content-Type"" content=""text/html; charset=utf-8"" />
-        <title>Gestor Web</title>
+        <title>Catálogo Web</title>
         <style>
             b {{
                 font-weight: bold;
@@ -232,14 +228,7 @@ namespace CatalogoWeb.Services
                                         <b><i>Somos diferentes</i></b>
                                     </font>
                                 </div>
-                                <p>
-                                    <font face=""Helvetica, Arial, sans-serif"" color=""#ffffff"" style=""font-size: 14px; text-align: justify; line-height: 17px;"">
-                                        <br />
-                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Queremos que você fale conosco, caso tenha alguma dúvida referente ao sistema, estamos pronto para atende-lo.
-                                        <br /><br />
-                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Envie um e-mail para <a href=""mailto:comercial.gestor@abase.com.br"" style=""color: #ffffff;"">comercial.gestor@abase.com.br</a> ou ligue para (55) 3535-4900.
-                                    </font>
-                                </p>
+                                
                                 <div>
                                     <font face=""Helvetica, Arial, sans-serif"" color=""#ffffff"" style=""font-size: 12px;text-align: right; width: 100%; display: inline-block;"">
                                         Atenciosamente
@@ -256,52 +245,6 @@ namespace CatalogoWeb.Services
                 <td colspan=""3"" height=""10""></td>
             </tr>
             <tr bgcolor=""#ececec"">
-                <td>&nbsp;</td>
-                <td align=""center"">
-                    <a href=""https://www.facebook.com/GestorWebBRA"" target=""_blank"" style=""margin-right: 15px; margin-top: 15px;"">
-                        <img src=""http://app.gestorweb.com.br/templateEmails/img/facebook.png"" alt=""Facebook"">
-                    </a>
-                    <a href=""https://www.instagram.com/gestorweb_bra/"" target=""_blank"" style=""margin-right: 15px; margin-top: 15px;"">
-                        <img src=""http://app.gestorweb.com.br/templateEmails/img/instagram.png"" alt=""Instagram"">
-                    </a>
-                    <a href=""https://blog.gestorweb.com.br/"" target=""_blank"" style=""margin-right: 15px; margin-top: 15px;"">
-                        <img src=""http://app.gestorweb.com.br/templateEmails/img/wordpress.png"" alt=""WordPress"">
-                    </a>
-                    <a href=""https://www.linkedin.com/company/gestorweb/"" target=""_blank"" style=""margin-top: 15px;"">
-                        <img src=""http://app.gestorweb.com.br/templateEmails/img/linkedin.png"" alt=""Linkedin"">
-                    </a>
-                </td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr bgcolor=""#ececec"">
-                <td colspan=""3"" height=""20""></td>
-            </tr>
-            <tr bgcolor=""#ececec"">
-                <td align=""center"" colspan=""3"">
-                    <font face=""Helvetica, Arial, sans-serif"" color=""#2b2b2b"" style=""font-size: 12px;"">
-                        <a href=""https://www.gestorweb.com.br"" target=""_blank"" style=""color: #2b2b2b;"">www.gestorweb.com.br</a>
-                    </font>
-                </td>
-            </tr>
-            <tr bgcolor=""#ececec"">
-                <td colspan=""3"" height=""15""></td>
-            </tr>
-            <tr bgcolor=""#ececec"">
-                <td align=""center"" colspan=""3"">
-                    <div>
-                        <font face=""Helvetica, Arial, sans-serif"" color=""#2b2b2b"" style=""font-size: 10px;"">
-                            Por favor, verifique nossa política de privacidade.
-                        </font>
-                    </div>
-                    <div>
-                        <font face=""Helvetica, Arial, sans-serif"" color=""#2b2b2b"" style=""font-size: 10px; line-height: 14px;"">
-                            Este e-mail foi mandado para {email}<br />
-                            © Todos os direitos reservados - Gesto Web®
-                        </font>
-                    </div>
-                </td>
-            </tr>
-            <tr bgcolor=""#ececec"">
                 <td colspan=""3"" height=""20""></td>
             </tr>
         </table>
@@ -312,7 +255,7 @@ namespace CatalogoWeb.Services
             List<string> destinatarios = new List<string>();
             destinatarios.Add(email);
 
-            //await _enviaEmailService.EnviarEmailERP("Bem vindo ao Gestor Web!", conteudoCorpoEmail, true, destinatarios, null);
+            await _enviaEmailService.EnviaEmail(email, "Bem vindo ao Catalogo Web!", conteudoCorpoEmail, true);
 
         }
 
