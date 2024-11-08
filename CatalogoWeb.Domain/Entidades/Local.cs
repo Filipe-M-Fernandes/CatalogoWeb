@@ -25,17 +25,17 @@ namespace CatalogoWeb.Domain.Entidades
 
         [JsonIgnore]
         public virtual Empresa empresa { get; set; }
-        public virtual LogradouroCidade logradouroCidade { get; set; }
+        /*public virtual LogradouroCidade logradouroCidade { get; set; }
         [JsonIgnore]
-        public virtual ParametrosLocal parametrolocal { get; set; }
+        public virtual ParametrosLocal parametrolocal { get; set; }*/
         [JsonIgnore]
         public virtual ICollection<ListaPreco> listaprecos { get; set; }
-        [JsonIgnore]
-        public virtual ICollection<Pedido> pedidos { get; set; }
+        /*[JsonIgnore]
+        public virtual ICollection<Pedido> pedidos { get; set; }*/
         [JsonIgnore]
         public virtual ICollection<ProdutoEstoque> produtoestoques { get; set; }
-        [JsonIgnore]
-        public virtual ICollection<Vendedor> vendedores { get; set; }
+       /* [JsonIgnore]
+        public virtual ICollection<Vendedor> vendedores { get; set; }*/
         [JsonIgnore]
         public virtual ICollection<UsuariosLocais> usuarioslocais { get; set; }
     }

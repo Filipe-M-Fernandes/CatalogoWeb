@@ -16,10 +16,10 @@ namespace CatalogoWeb.Domain.Entidades
         public bool usu_admin { get; set; }
         [JsonIgnore]
         public virtual ICollection<Empresa> empresas { get; set; }
-        [JsonIgnore]
+        /*[JsonIgnore]
         public virtual ICollection<UsuarioAcesso> usuarioacessos { get; set; }
         [JsonIgnore]
-        public virtual ICollection<Vendedor> vendedores { get; set; }
+        public virtual ICollection<Vendedor> vendedores { get; set; }*/
         [JsonIgnore]
         public virtual ICollection<UsuariosLocais> usuarioslocais { get; set; }
     }

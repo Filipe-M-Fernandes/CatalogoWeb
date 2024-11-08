@@ -25,14 +25,14 @@ namespace CatalogoWeb.Domain.Entidades
         public virtual ICollection<ModalidadeGrade> modalidadesgrades { get; set; }
         [JsonIgnore]
         public virtual ICollection<Ncm> ncms { get; set; }
-        public virtual ICollection<ParametrosEmpresa> parametrosempresas { get; set; }
-        [JsonIgnore]
-        public virtual ICollection<Pessoa> pessoas { get; set; }  
+        //public virtual ICollection<ParametrosEmpresa> parametrosempresas { get; set; }
+       // [JsonIgnore]
+        //public virtual ICollection<Pessoa> pessoas { get; set; }  
         [JsonIgnore]
         public virtual ICollection<Produto> produtos { get; set; }
-        [JsonIgnore]
+        /*[JsonIgnore]
         public virtual ICollection<StatusPedido> statuspedidos { get; set; }
         [JsonIgnore]
-        public virtual ICollection<UsuarioAcesso> usuarioacessos { get; set; }
+        public virtual ICollection<UsuarioAcesso> usuarioacessos { get; set; }*/
     }
 }
