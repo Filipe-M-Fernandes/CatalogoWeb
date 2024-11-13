@@ -10,7 +10,6 @@ namespace CatalogWeb.Infrastructure.Context
         {
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         }
-        public DbSet<Bairro> bairro { get; set; }
         //public DbSet<Cep> cep { get; set; }
         //public DbSet<Cidade> cidade { get; set; }
         //public DbSet<Cliente> cliente { get; set; }
@@ -105,7 +104,6 @@ namespace CatalogWeb.Infrastructure.Context
             //modelBuilder.ApplyConfiguration(new PessoaFisicaMap());
             //modelBuilder.ApplyConfiguration(new PessoaJuridicaMap());
             modelBuilder.ApplyConfiguration(new SubGrupoMap());
-            modelBuilder.ApplyConfiguration(new StatusPedidoMap());
             modelBuilder.ApplyConfiguration(new UsuarioMap());
             modelBuilder.ApplyConfiguration(new UsuariosLocaisMap());
             modelBuilder.ApplyConfiguration(new UnidadeMedidaMap());

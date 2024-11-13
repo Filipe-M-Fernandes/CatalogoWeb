@@ -46,7 +46,7 @@ namespace CatalogoWeb.Services
         {
             Grupo entidade = _mapper.Map<Grupo>(dados);
             entidade.emp_id = _dadosUsuarioLogado.CodigoEmpresa();
-
+            entidade.gru_ativo = true;
             if (!await _unitOfWork.GrupoProduto.AddAsync(entidade)) return default;
             await _unitOfWork.CommitAsync();
             return entidade;

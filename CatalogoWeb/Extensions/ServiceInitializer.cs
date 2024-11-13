@@ -30,7 +30,6 @@ namespace CatalogoWeb.Api.Extensions
             services.TryAddScoped<IEmpresaRepository, EmpresaRepository>();
             //services.TryAddScoped<IEstadoRepository, EstadoRepository>();
             services.TryAddScoped<IGrupoProdutoRepository, GrupoProdutoRepository>();
-            services.TryAddScoped<IListaPrecoClienteRepository, ListaPrecoClienteRepository>();
             services.TryAddScoped<IListaPrecoRepository, ListaPrecoRepository>();
             services.TryAddScoped<IListaPrecoItemRepository, ListaPrecoItemRepository>();
             services.TryAddScoped<ILocalRepository, LocalRepository>();

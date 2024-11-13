@@ -18,8 +18,6 @@ namespace CatalogoWeb.Domain.Entidades
         [JsonIgnore]
         public virtual ICollection<ListaPrecoItem> listaprecoitens { get; set; }
         [JsonIgnore]
-        public virtual ICollection<PedidoItem> pedidoitens { get; set; }
-        [JsonIgnore]
         public virtual ICollection<ProdutoEstoque> produtoestoques { get; set; }
 
         public virtual ICollection<ProdutoModalidadeGrade> produtomodalidadegrade { get; set; }

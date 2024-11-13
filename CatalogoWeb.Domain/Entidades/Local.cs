@@ -9,19 +9,16 @@ namespace CatalogoWeb.Domain.Entidades
         public string loc_codigo { get; set; }
         public string loc_descricao { get; set; }
         public string loc_cnpj { get; set; }
-        public int lcd_id { get; set; }
         public string loc_complemento { get; set; }
         public string loc_pontoreferencia { get; set; }
         public string loc_numeroestabelecimento { get; set; }
         public string loc_telefone { get; set; }
-        public string loc_email { get; set; }
-        public bool loc_substitutotributario { get; set; }
         public bool loc_ativo { get; set; }
         public string loc_cpfresponsavel { get; set; }
         public DateTime loc_datainclusao { get; set; }
         public bool loc_matriz { get; set; }
         public string loc_nomefantasia { get; set; }
-        public byte[] loc_logo { get; set; }
+        public byte[]? loc_logo { get; set; }
 
         [JsonIgnore]
         public virtual Empresa empresa { get; set; }

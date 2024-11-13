@@ -18,9 +18,7 @@ public class EmpresaMap : IEntityTypeConfiguration<Empresa>
         builder.Property(e => e.emp_ativa).IsRequired();
         builder.Property(e => e.emp_datainclusao).IsRequired();
 
-        builder.HasOne(d => d.usuario)
-            .WithMany(p => p.empresas)
-            .HasForeignKey(d => d.usu_id);
+       
 
     }
 }

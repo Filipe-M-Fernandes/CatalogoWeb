@@ -15,7 +15,6 @@ public class LocalMap : IEntityTypeConfiguration<Local>
         builder.Property(l => l.loc_codigo).IsRequired().HasMaxLength(20);
         builder.Property(l => l.loc_descricao).IsRequired().HasMaxLength(100);
         builder.Property(l => l.loc_numeroestabelecimento).IsRequired();
-        builder.Property(l => l.loc_substitutotributario).IsRequired();
         builder.Property(l => l.loc_ativo).IsRequired();
         builder.Property(l => l.loc_datainclusao).IsRequired();
         builder.Property(l => l.loc_matriz).IsRequired();
@@ -25,13 +24,13 @@ public class LocalMap : IEntityTypeConfiguration<Local>
             .WithMany(p => p.locais)
             .HasForeignKey(d => d.emp_id);
 
-        builder.HasOne(d => d.logradouroCidade)
+        /*builder.HasOne(d => d.logradouroCidade)
             .WithMany(p => p.locais)
             .HasForeignKey(d => d.lcd_id);
 
         builder.HasOne(p => p.parametrolocal)
             .WithOne(d => d.local)
-            .HasForeignKey<ParametrosLocal>(d => d.loc_id);
+            .HasForeignKey<ParametrosLocal>(d => d.loc_id);*/
 
      
     }

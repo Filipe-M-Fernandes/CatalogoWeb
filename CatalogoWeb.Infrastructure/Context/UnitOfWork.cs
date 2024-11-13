@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using CatalogoWeb.Abstractions.Repositories;
 using CatalogoWeb.Domain.Abstractions.Repositories;
 using CatalogoWeb.Domain.Entidades;
 using CatalogoWeb.Infrastructure.Repositories;

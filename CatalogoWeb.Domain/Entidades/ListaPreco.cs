@@ -20,10 +20,5 @@ namespace CatalogoWeb.Domain.Entidades
         public virtual Local local { get; set; }
         [JsonIgnore]
         public virtual ICollection<ListaPrecoItem> listaprecoitens { get; set; }
-       
-        [JsonIgnore]
-        public virtual ICollection<ListaPrecoCliente> listaprecoclientes { get; set; }
-        [JsonIgnore]
-        public virtual ICollection<ListaPrecoVendedor> listaprecovendedores { get; set; }
     }
 }

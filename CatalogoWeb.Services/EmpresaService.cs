@@ -25,6 +25,12 @@ namespace CatalogoWeb.Services
             _dadosUsuarioLogado = dadosUsuarioLogado;
         }
 
+        public async Task<List<Empresa>> ListarEmpresasUsuario(long id)
+        {
+            IEnumerable<Empresa> lista = await _unitOfWork.Empresas.FindAsync(u => u.emp_ativa == true && u.locais.Any(u => u.usuarioslocais.Any(u => u.usu_id == id)));
+            return lista.ToList();
+        }
+
         public async Task<PagedModel<Empresa>> ListarEmpresasUsuario(FiltrosEmpresa filtros, PagedParams paginacao)
         {
             long codigoUsuarioLogado = _dadosUsuarioLogado.IdUsuario();

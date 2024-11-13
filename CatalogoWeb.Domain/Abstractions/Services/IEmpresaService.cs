@@ -6,6 +6,7 @@ namespace CatalogoWeb.Domain.Abstractions.Services
 {
     public interface IEmpresaService
     {
+        Task<List<Empresa>> ListarEmpresasUsuario(long usuario);
         Task<PagedModel<Empresa>> ListarEmpresasUsuario(FiltrosEmpresa filtros, PagedParams paginacao);
     }
 }

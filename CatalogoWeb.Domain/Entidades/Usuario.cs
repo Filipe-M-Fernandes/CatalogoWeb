@@ -10,12 +10,9 @@ namespace CatalogoWeb.Domain.Entidades
         public string usu_nome { get; set; }
         public DateTime usu_datainclusao { get; set; }
         public bool usu_ativo { get; set; }
-        public byte[] usu_avatar { get; set; }
-        public DateTime? data_sincro { get; set; }
+        public byte[]? usu_avatar { get; set; }
         public DateTime usu_ultimologin { get; set; }
         public bool usu_admin { get; set; }
-        [JsonIgnore]
-        public virtual ICollection<Empresa> empresas { get; set; }
         /*[JsonIgnore]
         public virtual ICollection<UsuarioAcesso> usuarioacessos { get; set; }
         [JsonIgnore]

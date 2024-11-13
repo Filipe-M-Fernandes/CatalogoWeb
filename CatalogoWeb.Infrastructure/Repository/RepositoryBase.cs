@@ -81,8 +81,10 @@ public class RepositoryBase<TEntity, TId> : IRepositoryBase<TEntity, TId> where 
         throw new NotImplementedException();
     }
 
-    public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate,
-        string[] expands = null) => await dbSet.AsNoTracking().Where(predicate).Inflate(expands).ToListAsync();
+    public async Task<IEnumerable<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate, string[]? expands = null)
+    {
+        return await dbSet.AsNoTracking().Where(predicate).Inflate(expands).ToListAsync();
+    }
 
     public async Task<TEntity> FindFirstAsync(Expression<Func<TEntity, bool>> predicate, string[] expands = null, bool asNoTracking = false)
     {

@@ -15,16 +15,10 @@ namespace CatalogoWeb.Domain.Entidades
         [JsonIgnore]
         public virtual Local local { get; set; }
         [JsonIgnore]
-        public virtual Pessoa pessoa { get; set; }
-        [JsonIgnore]
         public virtual Usuario usuario { get; set; }
        /*[JsonIgnore]
         public virtual ICollection<Comissao> comissoes { get; set; }
         [JsonIgnore]
         public virtual ICollection<MetaVenda> metavenda { get; set; }*/
-        [JsonIgnore]
-        public virtual ICollection<Pedido> pedidos { get; set; }
-        [JsonIgnore]
-        public virtual ICollection<ListaPrecoVendedor> listaprecovendedores { get; set; }
     }
 }

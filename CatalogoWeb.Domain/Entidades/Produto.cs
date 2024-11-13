@@ -9,14 +9,9 @@ namespace CatalogoWeb.Domain.Entidades
         public long? sgp_id { get; set; }
         public long? gru_id { get; set; }
         public long? mar_id { get; set; }
-        public string orm_id { get; set; }
-        public string tpi_id { get; set; }
         public string ump_id { get; set; }
-        public int? csv_id { get; set; }
         public long? ncm_id { get; set; }
-        public long? pis_id { get; set; }
-        public string cei_id { get; set; }
-        public long pro_codigo { get; set; }
+        public string pro_codigo { get; set; }
         public string pro_ean { get; set; }
         public string pro_codigoetiqueta { get; set; }
         public string pro_descricao { get; set; }
@@ -25,12 +20,10 @@ namespace CatalogoWeb.Domain.Entidades
         public bool pro_produto { get; set; }
         public bool pro_ativo { get; set; }
         public string pro_observacao { get; set; }
-        public string pro_fci { get; set; }
         public int? cen_id { get; set; }
         public DateTime? data_sincro { get; set; }
         public bool pro_usagrade { get; set; }
         public DateTime? pro_datainclusao { get; set; }
-        public int? anp_id { get; set; }
         public decimal? pro_pesobruto { get; set; }
         public decimal? pro_pesoliquido { get; set; }
         public virtual Empresa empresa { get; set; }
@@ -41,8 +34,6 @@ namespace CatalogoWeb.Domain.Entidades
         public virtual UnidadeMedida unidademedida { get; set; }
         [JsonIgnore]
         public virtual ICollection<ListaPrecoItem> listaprecoitens { get; set; }
-        [JsonIgnore]
-        public virtual ICollection<PedidoItem> pedidoitens { get; set; }
         public virtual ICollection<ProdutoEstoque> produtoestoques { get; set; }
         public virtual ICollection<ProdutoGrade> produtogrades { get; set; }
         public virtual ICollection<ProdutoUnidade> produtounidades { get; set; }

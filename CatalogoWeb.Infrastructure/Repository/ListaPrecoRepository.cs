@@ -11,7 +11,7 @@ namespace CatalogoWeb.Infrastructure.Repositories
         public ListaPrecoRepository(CatalogoDbContext context, IMapper mapper) : base(context, mapper) { }
         public override async Task<bool> UpsertAsync(ListaPreco entity)
         {
-            var dadosExistentes = await dbSet.Where(x => x.ltp_id == entity.ltp_id).Include(x=> x.listaprecovendedores).Include(x => x.listaprecoclientes)
+            var dadosExistentes = await dbSet.Where(x => x.ltp_id == entity.ltp_id)
                 .FirstOrDefaultAsync();
 
             if (dadosExistentes == default)
@@ -35,7 +35,7 @@ namespace CatalogoWeb.Infrastructure.Repositories
 
         public override async Task<bool> DeleteAsync(long id)
         {
-            var dadosExistentes = await dbSet.Where(x => x.ltp_id == id).Include(e => e.listaprecovendedores).Include(x => x.listaprecoclientes)
+            var dadosExistentes = await dbSet.Where(x => x.ltp_id == id)
                 .FirstOrDefaultAsync();
 
             if (dadosExistentes == default) return false;

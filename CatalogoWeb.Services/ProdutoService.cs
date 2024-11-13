@@ -3,6 +3,9 @@ using CatalogoWeb.Core;
 using CatalogoWeb.Core.DadosUsuarioLogado;
 using CatalogoWeb.Domain.Abstractions.Services;
 using CatalogoWeb.Domain.DTO;
+using CatalogoWeb.Domain.DTO.Command.Grupo;
+using CatalogoWeb.Domain.DTO.Command.SubGrupo;
+using CatalogoWeb.Domain.Entidades;
 using CatalogoWeb.Domain.Entidades.Filtros;
 using CatalogoWeb.Domain.Enuns;
 using CatalogoWeb.Infrastructure;
@@ -15,12 +18,16 @@ namespace CatalogoWeb.Services
         private IUnitOfWork _unitOfWork;
         private IMapper _mapper;
         private readonly IDadosUsuarioLogado _dadosUsuarioLogado;
+        private IGrupoService _grupoService;
+        private ISubGrupoService _subGrupoService;
 
-        public ProdutoService(IUnitOfWork unitOfWork, IDadosUsuarioLogado dadosUsuarioLogado, IMapper mapper)
+        public ProdutoService(IUnitOfWork unitOfWork, IDadosUsuarioLogado dadosUsuarioLogado, IMapper mapper, ISubGrupoService subGrupoService, IGrupoService grupoService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _dadosUsuarioLogado = dadosUsuarioLogado;
+            _grupoService = grupoService;
+            _subGrupoService = subGrupoService;
         }
 
         public async Task<PagedModel<ProdutoGradeDTO>> ListaProdutoComGradeFiltro(FiltrosGerais filtros, PagedParams paginacao)
@@ -392,6 +399,55 @@ namespace CatalogoWeb.Services
                         where pro.PrecoVendaMinimo is not null and pro.PrecoVendaMaximo is not null
                         ";
             return sql;
+        }
+
+        public async Task<bool> PopularDados(List<PopularProdutoDTO> dados)
+        {
+            try
+            {
+                foreach (var pro in dados)
+                {
+                    Grupo grp = await _unitOfWork.GrupoProduto.FindFirstAsync(g => g.gru_nome == pro.grupo && g.gru_ativo);
+                    SubGrupo sg = await _unitOfWork.SubGrupo.FindFirstAsync(s => s.sgp_nome == pro.subgrupo && s.sgp_ativo);
+                    if (grp == null)
+                    {
+                        GrupoInsertCommand grpIns = new GrupoInsertCommand()
+                        {
+                            gru_ativo = true,
+                            gru_nome = pro.grupo
+                        };
+                        grp = await _grupoService.IncluirAsync(grpIns);
+                    }
+                    if (sg == null)
+                    {
+                        SubGrupoInsertCommand sgpIns = new SubGrupoInsertCommand()
+                        {
+                            sgp_nome = pro.subgrupo,
+                            gru_id = grp.gru_id,
+                            sgp_ativo = true
+                        };
+                        sg = await _subGrupoService.Incluir(sgpIns);
+                    }
+                    Produto prod = new Produto()
+                    {
+                        emp_id = _dadosUsuarioLogado.CodigoEmpresa(),
+                        pro_descricao = pro.descricao,
+                        pro_ativo = true,
+                        pro_codigo = pro.codigo,
+                        pro_datainclusao = DateTime.Now,
+                        pro_ean = pro.ean,
+                        pro_referencia = pro.referencia,
+                        gru_id = grp.gru_id,
+                        sgp_id = sg.sgp_id
+
+                    };
+                    await _unitOfWork.Produto.AddAsync(prod);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

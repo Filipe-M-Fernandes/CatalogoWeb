@@ -16,7 +16,6 @@ namespace CatalogoWeb.Domain.DTO.Command.Usuario
         public UsuarioAvatar avatar { get; set; }
         public ICollection<UsuarioLocalCommand> usuarioslocais { get; set; }
         public List<GrupoUsuarioCommand> grupousuarios { get; set; }
-        public List<UsuarioAcesso> usuarioacessos { get; set; }
         public List<PermissaoUpdateCommand> listaPermissoesPaginas { get; set; }
     }
 }

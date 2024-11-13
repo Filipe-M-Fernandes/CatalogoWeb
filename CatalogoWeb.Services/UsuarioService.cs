@@ -43,7 +43,7 @@ namespace CatalogoWeb.Services
             Usuario entidade = _mapper.Map<Usuario>(dados);
 
             entidade.usu_avatar = await _avatarService.InserirAvatar(dados.usu_email, dados.avatar);
-            entidade = CriarVinculoUsuarioEmpresa(entidade);
+            //entidade = CriarVinculoUsuarioEmpresa(entidade);
             entidade.usu_datainclusao = DateTime.Today;
             entidade.usu_ultimologin = DateTime.Today;
 
@@ -58,19 +58,7 @@ namespace CatalogoWeb.Services
             return retorno;
         }
 
-        private Usuario CriarVinculoUsuarioEmpresa(Usuario entidade)
-        {
-            entidade.usuarioacessos = new List<UsuarioAcesso>();
-            var acesso = new UsuarioAcesso()
-            {
-                emp_id = _dadosUsuarioLogado.CodigoEmpresa(),
-                uac_dia = -1
-
-            };
-            entidade.usuarioacessos.Add(acesso);
-
-            return entidade;
-        }
+       
 
         public async Task<string> ConfirmarTrocaSenha(string nova)
         {

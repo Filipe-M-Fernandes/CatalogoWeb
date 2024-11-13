@@ -5,6 +5,7 @@ using CatalogoWeb.Domain.Entidades;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using System.Net;
 
 namespace CatalogoWeb.Api.Controllers
 {
@@ -22,7 +23,7 @@ namespace CatalogoWeb.Api.Controllers
 
         [AllowAnonymous]
         [HttpPost("EfetuarLogin")]
-        public async Task<ActionResult<string>> EfetuarLogin(Login lg)
+        public async Task<ActionResult<string>> EfetuarLogin([FromBody] Login lg)
         {
             try
             {
@@ -32,11 +33,11 @@ namespace CatalogoWeb.Api.Controllers
                 if (usuario.usu_ativo == false)
                     return Unauthorized("Usuário Bloqueado!");
                 var tokenService = new TokenService(_configuration.GetSection("JWT"));
-                return tokenService.GenerateToken(usuario);
+                return Ok(tokenService.GenerateToken(usuario));
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
     }

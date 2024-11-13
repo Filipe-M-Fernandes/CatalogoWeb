@@ -4,11 +4,11 @@ using CatalogoWeb.Domain.Entidades;
 
 namespace CatalogoWeb.Domain.Profiles
 {
-    public class UsuarioMapper : Profile
+    public class LocalMapper : Profile
     {
-        public UsuarioMapper()
+        public LocalMapper()
         {
-            CreateMap<Usuario, UsuarioDTO>();
+            CreateMap<Local, UsuarioDTO>();
         }
     }
 }
