@@ -5,7 +5,7 @@ namespace CatalogoWeb.Domain.Entidades.Filtros
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
-        public string Order { get; set; }
+        public string? Order { get; set; }
 
     }
 }

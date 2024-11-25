@@ -8,7 +8,6 @@ namespace CatalogoWeb.Domain.Entidades
         public int emp_id { get; set; }
         public string gru_nome { get; set; }
         public bool gru_ativo { get; set; }
-        public DateTime? data_sincro { get; set; }
         [JsonIgnore]
         public virtual Empresa empresa { get; set; }
         [JsonIgnore]

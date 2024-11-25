@@ -8,7 +8,6 @@ namespace CatalogoWeb.Domain.Entidades
         public int emp_id { get; set; }
         public long? mgp_modalidade { get; set; }
         public string mgp_descricao { get; set; }
-        public DateTime? data_sincro { get; set; }
         public bool? mgp_imprimenaetiqueta { get; set; }
         [JsonIgnore]
         public virtual Empresa empresa { get; set; }

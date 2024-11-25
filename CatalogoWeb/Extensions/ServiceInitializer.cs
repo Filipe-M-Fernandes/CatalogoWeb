@@ -73,13 +73,14 @@ namespace CatalogoWeb.Api.Extensions
             services.TryAddScoped<IMarcaService, MarcaService>();
             services.TryAddScoped<IEnviaEmailService, EnviaEmailService>();
             services.TryAddScoped<ILoginService, LoginService>();
-
             services.TryAddScoped<ISubGrupoService, SubGrupoService>();
-
             services.TryAddScoped<IClienteService, ClienteService>();
-
             services.TryAddScoped<IProdutoService, ProdutoService>();
-
+            services.TryAddScoped<IGrupoService, GrupoService>();
+            services.TryAddScoped<IImagemService, ImagemService>();
+            services.TryAddScoped<IUsuarioService, UsuarioService>();
+            services.TryAddScoped<IAvatarService, AvatarService>();
+            services.TryAddScoped<IAcessosService, AcessosService>();
         }
 
         private static void RegistrarAutoMapper(IServiceCollection services)

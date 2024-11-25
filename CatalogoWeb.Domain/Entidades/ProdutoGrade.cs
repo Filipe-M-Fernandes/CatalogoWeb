@@ -11,7 +11,6 @@ namespace CatalogoWeb.Domain.Entidades
         public string prg_codigoetiqueta { get; set; }
         public decimal? prg_valorvenda { get; set; }
         public bool prg_ativa { get; set; }
-        public DateTime? data_sincro { get; set; }
         public decimal? prg_markup { get; set; }
         [JsonIgnore]
         public virtual Produto produto { get; set; }

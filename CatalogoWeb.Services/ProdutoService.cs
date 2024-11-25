@@ -10,6 +10,7 @@ using CatalogoWeb.Domain.Entidades.Filtros;
 using CatalogoWeb.Domain.Enuns;
 using CatalogoWeb.Infrastructure;
 using CatalogoWeb.Infrastructure.Data;
+using System;
 
 namespace CatalogoWeb.Services
 {
@@ -20,14 +21,15 @@ namespace CatalogoWeb.Services
         private readonly IDadosUsuarioLogado _dadosUsuarioLogado;
         private IGrupoService _grupoService;
         private ISubGrupoService _subGrupoService;
-
-        public ProdutoService(IUnitOfWork unitOfWork, IDadosUsuarioLogado dadosUsuarioLogado, IMapper mapper, ISubGrupoService subGrupoService, IGrupoService grupoService)
+        private IImagemService _imagemService;
+        public ProdutoService(IUnitOfWork unitOfWork, IDadosUsuarioLogado dadosUsuarioLogado, IMapper mapper, ISubGrupoService subGrupoService, IGrupoService grupoService, IImagemService imagemService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _dadosUsuarioLogado = dadosUsuarioLogado;
             _grupoService = grupoService;
             _subGrupoService = subGrupoService;
+            _imagemService = imagemService;
         }
 
         public async Task<PagedModel<ProdutoGradeDTO>> ListaProdutoComGradeFiltro(FiltrosGerais filtros, PagedParams paginacao)
@@ -42,7 +44,6 @@ namespace CatalogoWeb.Services
             string sql = @$"select pro.pro_id, 
                         pro.pro_codigo, 
                         pro.pro_ean, 
-                        pro.pro_codigoetiqueta, 
                         pro.pro_descricao, 
                         pro.pro_referencia, 
                         ncm.ncm_codigo, 
@@ -60,7 +61,7 @@ namespace CatalogoWeb.Services
                         OR (pro.pro_usagrade = true AND EXISTS(SELECT ProdutoGrade.pro_id FROM ProdutoGrade WHERE ProdutoGrade.pro_id = pro.pro_id)))";
             if (!string.IsNullOrEmpty(filtros.Filtro))
             {
-                sql += " AND (pro.pro_descricao ilike @Filtro OR pro.pro_modelo ilike @Filtro OR pro.pro_codigoetiqueta ilike @Filtro OR pro.pro_referencia ilike @Filtro OR prg.prg_codigoetiqueta ilike @Filtro ";
+                sql += " AND (pro.pro_descricao ilike @Filtro OR pro.pro_modelo ilike @Filtro OR pro.pro_referencia ilike @Filtro";
                 if (!string.IsNullOrEmpty(TextoHelper.RetornaNumeros(filtros.Filtro)) && TextoHelper.RetornaLetras(filtros.Filtro).Length == 0)
                 {
                     sql += @" OR pro.pro_codigo = @FiltroNum";
@@ -85,7 +86,6 @@ namespace CatalogoWeb.Services
             string sql = @$"select pro.pro_id, 
                         pro.pro_codigo, 
                         pro.pro_ean, 
-                        pro.pro_codigoetiqueta, 
                         pro.pro_descricao, 
                         pro.pro_referencia, 
                         ncm.ncm_codigo, 
@@ -102,7 +102,7 @@ namespace CatalogoWeb.Services
                         OR (pro.pro_usagrade = true AND EXISTS(SELECT ProdutoGrade.pro_id FROM ProdutoGrade WHERE ProdutoGrade.pro_id = pro.pro_id)))";
             if (!string.IsNullOrEmpty(filtros.Filtro))
             {
-                sql += " AND (pro.pro_descricao ilike @Filtro OR pro.pro_modelo ilike @Filtro OR pro.pro_codigoetiqueta ilike @Filtro OR pro.pro_referencia ilike @Filtro OR prg.prg_codigoetiqueta ilike @Filtro ";
+                sql += " AND (pro.pro_descricao ilike @Filtro OR pro.pro_modelo ilike @Filtro OR pro.pro_referencia ilike @Filtro OR prg.prg_codigoetiqueta ilike @Filtro ";
                 if (!string.IsNullOrEmpty(TextoHelper.RetornaNumeros(filtros.Filtro)) && TextoHelper.RetornaLetras(filtros.Filtro).Length == 0)
                 {
                     sql += @" OR pro.pro_codigo = @FiltroNum";
@@ -128,67 +128,29 @@ namespace CatalogoWeb.Services
                 marca = filtros.IdMarca,
                 grupo = filtros.IdGrupo,
                 SubGrupo = filtros.IdSubGrupo,
-                precoMinimo = filtros.PrecoMinimo,
-                precoMaximo = filtros.PrecoMaximo,
                 produtoAtivo = filtros.Ativo,
                 filtroAdicional = filtros.FiltroAdicional,
                 CodigoListaPreco = _codigoListaPreco,
             };
 
-            string sql = $@"with cte_produtopreco as (
-                        select pro.pro_id, max(coalesce(lpi_valorvenda,0)) as PrecoVendaMinimo, max(coalesce(lpi_valorvenda,0)) as PrecoVendaMaximo
-                        from ListaPrecoItem as lpi 
-                        inner join Produto pro on (lpi.pro_id = pro.pro_id)
-                        inner join ListaPreco as lpc ON(lpc.emp_id = pro.emp_id and lpi.ltp_id = @CodigoListaPreco) --lpi.ltp_id AND lpc.ltp_principal = true and lpc.ltp_ativa = true)
-                        WHERE pro.emp_id =   @CodigoEmpresa  and pro.pro_usagrade = false ";
-            if (filtros.PrecoMinimo >= 0 && filtros.PrecoMinimo != null)
-            {
-                sql += "and lpi_valorvenda >= (  @precoMinimo )::decimal ";
-            }
-            if (filtros.PrecoMaximo > 0 && filtros.PrecoMaximo != null)
-            {
-                sql += "and lpi_valorvenda <= (  @precoMaximo )::decimal ";
-            }
-            sql += @"  group by pro.pro_id
-                        ), 
-                        cte_produtoprecograde as (
-                        select pro.pro_id, max(coalesce(lpi_valorvenda,0)) as PrecoVendaMinimo, max(coalesce(lpi_valorvenda,0)) as PrecoVendaMaximo
-                        from ListaPrecoItem lpi
-                        inner join Produto pro on (lpi.pro_id = pro.pro_id)
-                        inner join ListaPreco lpc ON(lpc.emp_id = pro.emp_id and lpi.ltp_id = @CodigoListaPreco) -- lpi.ltp_id AND lpc.ltp_principal = true and lpc.ltp_ativa = true)
-                        WHERE pro.emp_id = @CodigoEmpresa  and pro.pro_usagrade = true and lpi.prg_id is not null ";
-            if (filtros.PrecoMinimo >= 0 && filtros.PrecoMinimo != null)
-            {
-                sql += "and lpi_valorvenda >= (  @precoMinimo )::decimal ";
-            }
-            if (filtros.PrecoMaximo > 0 && filtros.PrecoMaximo != null)
-            {
-                sql += "and lpi_valorvenda <= (  @precoMaximo )::decimal ";
-            }
-            sql += @"  group by pro.pro_id
-                        ),
-                        produtos as (
-                        SELECT DISTINCT pro.pro_id, pro.pro_descricao, pro.pro_datainclusao, sgp.sgp_id, sgp.sgp_nome, grp.gru_id, grp.gru_nome, 
-                        mar.mar_id, mar.mar_nome, ncm.ncm_id, ncm.ncm_descricao, ncm.ncm_codigo, ncm.cip_saida, ump.ump_id, ump.ump_descricao,
-                        ump.ump_casasdecimais, pro.pro_codigo, pro.pro_ean, pro.pro_codigoetiqueta, pro.pro_referencia, pro.pro_modelo,
-                        pro.pro_referencia, pro.pro_modelo, pro.pro_produto, pro.pro_servico, pro.pro_materiaprima, pro.pro_usabalanca, 
-                        pro.pro_ativo, pro.pro_kitcomposicao, pro.pro_observacao, pro.pro_fci, pro.cen_id,pro.pro_pesoliquido,pro.pro_pesobruto,
-                        pro.pro_controlelote, pro.pro_usagrade,
-                        (case when pro.pro_usagrade = true then pg.PrecoVendaMinimo else pp.PrecoVendaMinimo end) as PrecoVendaMinimo,
-                        (case when pro.pro_usagrade = true then pg.PrecoVendaMaximo else pp.PrecoVendaMaximo end) as PrecoVendaMaximo
+            string sql = $@"
+                        SELECT DISTINCT pro.pro_id, pro.pro_descricao, pro.pro_datainclusao, sgp.sgp_id, sgp.sgp_nome, grp.gru_id, grp.gru_nome,
+		                     mar.mar_id, mar.mar_nome, ncm.ncm_id, ncm.ncm_descricao, ncm.ncm_codigo, ump.ump_id, ump.ump_descricao,
+		                     ump.ump_casasdecimais, pro.pro_codigo, pro.pro_ean, pro.pro_referencia,pro.pro_descricaodetalhada, pro.pro_descricaoresumida,
+		                     pro.pro_referencia, pro.pro_produto,pro.pro_ativo, pro.pro_observacao, pro.cen_id,pro.pro_usagrade, coalesce(imp.imp_imagem, '') as imagem,
+                             coalesce(get_valor_promocao(pro.pro_id),0) as valorPromocao, coalesce(get_valor_produto(pro.pro_id),0) as valorVenda
                         FROM produto pro
-                        left join cte_produtopreco pp on (pp.pro_id = pro.pro_id)
-                        left join cte_produtoprecograde pg on (pg.pro_id = pro.pro_id)
                         LEFT JOIN subgrupo sgp ON(pro.sgp_id = sgp.sgp_id)
                         LEFT JOIN marca mar ON (pro.mar_id = mar.mar_id)
                         LEFT JOIN ncm ON(pro.ncm_id = ncm.ncm_id)
                         LEFT JOIN unidademedida ump ON(pro.ump_id = ump.ump_id)
                         LEFT JOIN grupo grp ON(grp.gru_id = pro.gru_id)
                         LEFT JOIN produtograde prg ON(prg.pro_id = pro.pro_id)
-                        WHERE pro.emp_id =   @CodigoEmpresa ";
+                        LEFT JOIN imagemproduto imp on (imp.pro_id = pro.pro_id)
+                        WHERE pro.emp_id = @CodigoEmpresa ";
             if (!string.IsNullOrEmpty(filtros.Filtro))
             {
-                sql += " AND (pro.pro_descricao ilike @Filtro OR pro.pro_modelo ilike @Filtro OR pro.pro_codigoetiqueta ilike @Filtro OR pro.pro_referencia ilike @Filtro OR prg.prg_codigoetiqueta ilike @Filtro ";
+                sql += " AND (pro.pro_descricao ilike @Filtro OR pro.pro_modelo ilike @Filtro OR pro.pro_referencia ilike @Filtro OR prg.prg_codigoetiqueta ilike @Filtro ";
                 if (!string.IsNullOrEmpty(TextoHelper.RetornaNumeros(filtros.Filtro)) && TextoHelper.RetornaLetras(filtros.Filtro).Length == 0)
                 {
                     sql += @" OR pro.pro_codigo = @FiltroNum";
@@ -227,12 +189,6 @@ namespace CatalogoWeb.Services
                 sql += " and pro.pro_ativo = false";
             }
 
-            sql += ")";
-            sql += @" select *
-                        from produtos pro
-                        where pro.PrecoVendaMinimo is not null and pro.PrecoVendaMaximo is not null
-                        ";
-
             string sqlCount = TotalListarTodas(filtros, _codigoListaPreco.Value);
             return await _unitOfWork.Context.QueryAsyncPaged<ProdutoDTO>(sql, sqlCount, paginacao, parametrosSql);
         }
@@ -248,10 +204,9 @@ namespace CatalogoWeb.Services
             };
 
             string sql = @$" SELECT produto.*, subgrupo.sgp_id, subgrupo.sgp_nome, grupo.gru_id, grupo.gru_nome, marca.mar_id, marca.mar_nome, ncm.ncm_id, ncm.ncm_descricao,
-                                ncm.ncm_ativo, ncm.ncm_codigo, ncm.cip_saida, tipoprodutosped.tpi_id, tipoprodutosped.tpi_descricao,
+                                ncm.ncm_ativo, ncm.ncm_codigo, ncm.cip_saida,
                                 unidademedida.ump_id, unidademedida.ump_descricao, unidademedida.ump_casasdecimais, ListaPrecoItem.lpi_valorvenda,
-                                produtounidade.pru_id,produtounidade.pru_quantidade,
-                                produtounidade.ump_id as emb_ump_id
+                                produtounidade.pru_id,produtounidade.pru_quantidade,produtounidade.ump_id as emb_ump_id
                                 FROM produto
                                 LEFT JOIN subgrupo ON(produto.sgp_id = subgrupo.sgp_id)
                                 LEFT JOIN marca ON (produto.mar_id = marca.mar_id)
@@ -295,57 +250,14 @@ namespace CatalogoWeb.Services
                 IdProduto = filtros.IdProduto,
                 grupo = filtros.IdGrupo,
                 SubGrupo = filtros.IdSubGrupo,
-                precoMinimo = filtros.PrecoMinimo,
-                precoMaximo = filtros.PrecoMaximo,
                 produtoAtivo = filtros.Ativo,
                 filtroAdicional = filtros.FiltroAdicional,
                 CodigoListaPreco = _codigoListaPreco,
             };
 
-            string sql = $@" with cte_produtopreco as (
-                        select pro.pro_id, max(coalesce(lpi_valorvenda,0)) as PrecoVendaMinimo, max(coalesce(lpi_valorvenda,0)) as PrecoVendaMaximo
-                        from ListaPrecoItem as lpi 
-                        inner join Produto pro on (lpi.pro_id = pro.pro_id)
-                        inner join ListaPreco as lpc ON(lpc.emp_id = pro.emp_id and lpi.ltp_id = @CodigoListaPreco) --lpi.ltp_id AND lpc.ltp_principal = true and lpc.ltp_ativa = true)
-                        WHERE pro.emp_id =   @CodigoEmpresa  and pro.pro_usagrade = false ";
-            if (filtros.PrecoMinimo >= 0 && filtros.PrecoMinimo != null)
-            {
-                sql += " and lpi_valorvenda >= (  @precoMinimo )::decimal ";
-            }
-            if (filtros.PrecoMinimo > 0 && filtros.PrecoMaximo != null)
-            {
-                sql += " and lpi_valorvenda <= (  @precoMaximo )::decimal ";
-            }
-            sql += @"  group by pro.pro_id
-                        ), 
-                        cte_produtoprecograde as (
-                        select pro.pro_id, max(coalesce(lpi_valorvenda,0)) as PrecoVendaMinimo, max(coalesce(lpi_valorvenda,0)) as PrecoVendaMaximo
-                        from ListaPrecoItem lpi
-                        inner join Produto pro on (lpi.pro_id = pro.pro_id)
-                        inner join ListaPreco as lpc ON(lpc.emp_id = pro.emp_id and lpi.ltp_id = @CodigoListaPreco) --lpi.ltp_id AND lpc.ltp_principal = true and lpc.ltp_ativa = true)
-                        WHERE pro.emp_id =   @CodigoEmpresa  and pro.pro_usagrade = true and lpi.prg_id is not null ";
-            if (filtros.PrecoMinimo > 0 && filtros.PrecoMinimo != null)
-            {
-                sql += " and lpi_valorvenda >= (  @precoMinimo )::decimal ";
-            }
-            if (filtros.PrecoMaximo > 0 && filtros.PrecoMaximo != null)
-            {
-                sql += " and lpi_valorvenda <= (  @precoMaximo )::decimal ";
-            }
-            sql += @"  group by pro.pro_id
-                        ),
-                        valor as (
-                        SELECT DISTINCT pro.pro_id, pro.pro_descricao, pro.pro_datainclusao, sgp.sgp_id, sgp.sgp_nome, grp.gru_id, grp.gru_nome, 
-                        mar.mar_id, mar.mar_nome, pis.pis_id,pis.pis_descricao, ncm.ncm_id, ncm.ncm_descricao, ncm.ncm_codigo, ncm.cip_saida, 
-                        tpi.tpi_id, tpi.tpi_descricao,ump.ump_id, ump.ump_descricao, ump.ump_casasdecimais, csv1.csv_id, csv1.csv_descricao,
-                        com.orm_id, com.orm_descricao, nat.nat_id, nat.nat_descricao, pro.pro_codigo, pro.pro_ean, pro.pro_codigoetiqueta,
-                        pro.pro_referencia, pro.pro_modelo,
-                        pro.pro_ativo,pro.pro_observacao, pro.pro_pesoliquido,pro.pro_pesobruto,
-                        (case when pro.pro_usagrade = true then pg.PrecoVendaMinimo else pp.PrecoVendaMinimo end) as PrecoVendaMinimo,
-                        (case when pro.pro_usagrade = true then pg.PrecoVendaMaximo else pp.PrecoVendaMaximo end) as PrecoVendaMaximo
+            string sql = $@"
+                        SELECT count(*) as total
                         FROM produto pro
-                        left join cte_produtopreco pp on (pp.pro_id = pro.pro_id)
-                        left join cte_produtoprecograde pg on (pg.pro_id = pro.pro_id)
                         LEFT JOIN subgrupo sgp ON(pro.sgp_id = sgp.sgp_id)
                         LEFT JOIN marca mar ON (pro.mar_id = mar.mar_id)
                         LEFT JOIN ncm ON(pro.ncm_id = ncm.ncm_id)
@@ -355,7 +267,7 @@ namespace CatalogoWeb.Services
                         WHERE pro.emp_id = @CodigoEmpresa ";
             if (!string.IsNullOrEmpty(filtros.Filtro))
             {
-                sql += " AND (pro.pro_descricao ilike @Filtro OR pro.pro_modelo ilike @Filtro OR pro.pro_codigoetiqueta ilike @Filtro OR pro.pro_referencia ilike @Filtro OR prg.prg_codigoetiqueta ilike @Filtro ";
+                sql += " AND (pro.pro_descricao ilike @Filtro OR pro.pro_modelo ilike @Filtro OR OR pro.pro_referencia ilike @Filtro ";
                 if (!string.IsNullOrEmpty(TextoHelper.RetornaNumeros(filtros.Filtro)) && TextoHelper.RetornaLetras(filtros.Filtro).Length == 0)
                 {
                     sql += @" OR pro.pro_codigo = @FiltroNum";
@@ -393,11 +305,6 @@ namespace CatalogoWeb.Services
             {
                 sql += " and pro.pro_ativo = false";
             }
-            sql += ")";
-            sql += $@" select count(*)as total
-                        from valor pro
-                        where pro.PrecoVendaMinimo is not null and pro.PrecoVendaMaximo is not null
-                        ";
             return sql;
         }
 
@@ -433,6 +340,7 @@ namespace CatalogoWeb.Services
                         emp_id = _dadosUsuarioLogado.CodigoEmpresa(),
                         pro_descricao = pro.descricao,
                         pro_ativo = true,
+                        ump_id = "UN",
                         pro_codigo = pro.codigo,
                         pro_datainclusao = DateTime.Now,
                         pro_ean = pro.ean,
@@ -441,8 +349,32 @@ namespace CatalogoWeb.Services
                         sgp_id = sg.sgp_id
 
                     };
-                    await _unitOfWork.Produto.AddAsync(prod);
+                    var ret = await _unitOfWork.Produto.AddAsync(prod);
+
                 }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<bool> AtualizarDadosGerados(List<PopularProdutoDTO> dados)
+        {
+            try
+            {
+                string caminho = "C:\\Users\\filip\\OneDrive\\Área de Trabalho\\ImagensTCC";
+                foreach (var pro in dados)
+                {
+                    Produto p = await _unitOfWork.Produto.FindFirstAsync(p => p.pro_codigo == pro.codigo);
+                    if (p != null)
+                    {
+                        await _imagemService.SalvarImagemComoBase64Async(p.pro_id, caminho + "\\" + p.pro_codigo + ".jpg", 400, 400);
+                    }
+                }
+                await _unitOfWork.CommitAsync();
+                return true;
             }
             catch (Exception ex)
             {

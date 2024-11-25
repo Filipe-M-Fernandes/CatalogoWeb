@@ -8,7 +8,6 @@ namespace CatalogoWeb.Domain.Entidades
         public long gru_id { get; set; }
         public string sgp_nome { get; set; }
         public bool sgp_ativo { get; set; }
-        public DateTime? data_sincro { get; set; }
         public virtual Grupo grupo { get; set; }
         [JsonIgnore]
         public virtual ICollection<Produto> produtos { get; set; }

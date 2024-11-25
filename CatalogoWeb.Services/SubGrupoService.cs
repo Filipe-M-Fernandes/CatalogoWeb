@@ -29,7 +29,7 @@ namespace CatalogoWeb.Services
             return _unitOfWork.SubGrupo.GetByIdAsync(Id);
         }
 
-        public Task<PagedModel<SubGrupo>> Listar(FiltrosSubGrupo filtros, string[] expand, PagedParams paginacao)
+        public Task<PagedModel<SubGrupo>> Listar(FiltrosSubGrupo filtros, PagedParams paginacao)
         {
             var filtroQuery = MontarFiltro(filtros);
             return _unitOfWork.SubGrupo.FindAsync(filtroQuery, paginacao, new string[] { "grupo" });

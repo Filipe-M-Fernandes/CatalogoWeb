@@ -13,19 +13,18 @@ namespace CatalogoWeb.Domain.Entidades
         public long? ncm_id { get; set; }
         public string pro_codigo { get; set; }
         public string pro_ean { get; set; }
-        public string pro_codigoetiqueta { get; set; }
         public string pro_descricao { get; set; }
         public string pro_referencia { get; set; }
-        public string pro_modelo { get; set; }
         public bool pro_produto { get; set; }
         public bool pro_ativo { get; set; }
-        public string pro_observacao { get; set; }
+        public string? pro_observacao { get; set; }
         public int? cen_id { get; set; }
-        public DateTime? data_sincro { get; set; }
         public bool pro_usagrade { get; set; }
         public DateTime? pro_datainclusao { get; set; }
         public decimal? pro_pesobruto { get; set; }
         public decimal? pro_pesoliquido { get; set; }
+        public string? pro_descricaodetalhada { get; set; }
+        public string? pro_descricaoresumida { get; set; }
         public virtual Empresa empresa { get; set; }
         public virtual Grupo grupo { get; set; }
         public virtual Marca marca { get; set; }

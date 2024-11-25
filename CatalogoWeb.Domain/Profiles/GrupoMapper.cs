@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CatalogoWeb.Domain.DTO.Command.Grupo;
+using CatalogoWeb.Domain.Entidades;
 
 namespace CatalogoWeb.Domain.Profiles
 {
@@ -7,7 +8,8 @@ namespace CatalogoWeb.Domain.Profiles
     {
         public GrupoMapper()
         {
-            CreateMap<GrupoInsertCommand, GrupoCommand>();
+            CreateMap<GrupoInsertCommand, Grupo>();
+            CreateMap<GrupoCommand, Grupo>();
         }
     }
 }

@@ -19,7 +19,7 @@ namespace CatalogWeb.Infrastructure.Context
         public DbSet<GrupoMenu> grupoMenu { get; set; }
         public DbSet<ItemMenu> itemMenu { get; set; }
         public DbSet<ListaPreco> listaPreco { get; set; }
-      //  public DbSet<ListaPrecoCliente> listaPrecoCliente { get; set; }
+        //  public DbSet<ListaPrecoCliente> listaPrecoCliente { get; set; }
         public DbSet<ListaPrecoItem> listaPrecoItem { get; set; }
         //public DbSet<ListaPrecoVendedor> listaPrecoVendedor { get; set; }
         public DbSet<Local> local { get; set; }
@@ -52,6 +52,9 @@ namespace CatalogWeb.Infrastructure.Context
         //public DbSet<UsuarioAcesso> usuarioAcessos { get; set; }
         public DbSet<UsuariosLocais> usuariosLocais { get; set; }
         //public DbSet<Vendedor> vendedor { get; set; }
+        public DbSet<ImagemProduto> imagemProduto { get; set; }
+        public DbSet<ProdutosAcesso> produtosAcesso { get; set; }
+        public DbSet<GruposAcesso> gruposAcesso { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
@@ -109,6 +112,9 @@ namespace CatalogWeb.Infrastructure.Context
             modelBuilder.ApplyConfiguration(new UnidadeMedidaMap());
             //modelBuilder.ApplyConfiguration(new UsuarioAcessoMap());
             modelBuilder.ApplyConfiguration(new ProdutoUnidadeMap());
+            modelBuilder.ApplyConfiguration(new ImagemProdutoMap());
+            modelBuilder.ApplyConfiguration(new ProdutosAcessoMap());
+            modelBuilder.ApplyConfiguration(new GruposAcessoMap());
             base.OnModelCreating(modelBuilder);
         }
     }

@@ -25,6 +25,9 @@ namespace CatalogoWeb.Infrastructure
         IProdutoGradeRepository ProdutoGrade { get; }
         IListaPrecoRepository ListaPreco { get; }
         IListaPrecoItemRepository ListaPrecoItem { get; }
+        IImagemProdutoRepository ImagemProduto { get; }
+        IGruposAcessoRepository GruposAcesso { get; }
+        IProdutosAcessoRepository ProdutosAcesso { get; }
         Task CommitAsync();
     }
 }

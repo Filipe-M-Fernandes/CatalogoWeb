@@ -14,7 +14,6 @@ namespace CatalogoWeb.Domain.Entidades
         public decimal? pre_valorcustomedio { get; set; }
         public decimal? pre_custoultimacompra { get; set; }
         public DateTime pre_dataposicao { get; set; }
-        public DateTime? data_sincro { get; set; }
         public long? prg_id { get; set; }
         [JsonIgnore]
         public virtual Local local { get; set; }

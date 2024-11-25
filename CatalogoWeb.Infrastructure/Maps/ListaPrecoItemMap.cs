@@ -11,7 +11,6 @@ public class ListaPrecoItemMap : IEntityTypeConfiguration<ListaPrecoItem>
         builder.ToTable("listaprecoitem");
         builder.HasKey(l => l.lpi_id);
         builder.Property(l => l.lpi_valorvenda).IsRequired().HasPrecision(16, 3);
-        builder.Property(l => l.lpi_naocalculacomissao).IsRequired();
 
         builder.HasOne(d => d.listapreco)
             .WithMany(p => p.listaprecoitens)

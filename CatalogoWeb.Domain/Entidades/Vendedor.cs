@@ -10,7 +10,6 @@ namespace CatalogoWeb.Domain.Entidades
         public long? usu_id { get; set; }
         public decimal? ven_maximodesconto { get; set; }
         public bool ven_ativo { get; set; }
-        public DateTime? data_sincro { get; set; }
         
         [JsonIgnore]
         public virtual Local local { get; set; }

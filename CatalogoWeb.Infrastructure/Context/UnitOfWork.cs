@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using CatalogoWeb.Domain.Abstractions.Repositories;
-using CatalogoWeb.Domain.Entidades;
 using CatalogoWeb.Infrastructure.Repositories;
+using CatalogoWeb.Infrastructure.Repository;
 using CatalogWeb.Infrastructure.Context;
 using System.Numerics;
 
@@ -28,8 +28,8 @@ namespace CatalogoWeb.Infrastructure.Context
         //public IParametrosEmpresaRepository ParametrosEmpresa { get; private set; }
         //public IParametrosLocalRepository ParametrosLocal { get; private set; }
         //public IPessoaRepository Pessoa { get; private set; }
-       // public IPessoaFisicaRepository PessoaFisica { get; private set; }
-       // public IPessoaJuridicaRepository PessoaJuridica { get; private set; }
+        // public IPessoaFisicaRepository PessoaFisica { get; private set; }
+        // public IPessoaJuridicaRepository PessoaJuridica { get; private set; }
         //public IPessoaEmailRepository PessoaEmail { get; private set; }
         //public IPessoaTelefoneRepository PessoaTelefone { get; private set; }
         //public IPessoaEnderecoRepository PessoaEndereco { get; private set; }
@@ -50,7 +50,9 @@ namespace CatalogoWeb.Infrastructure.Context
         //public IPedidoItemRepository PedidoItem { get; private set; }
         public IModalidadeGradeRepository ModalidadeGrade { get; private set; }
         //public IUsuarioAcessoRepository UsuarioAcesso { get; private set; }
-
+        public IImagemProdutoRepository ImagemProduto { get; private set; }
+        public IProdutosAcessoRepository ProdutosAcesso { get; private set; }
+        public IGruposAcessoRepository GruposAcesso { get; private set; }
         public UnitOfWork(CatalogoDbContext context, IMapper mapper)
         {
             Context = context;
@@ -66,36 +68,39 @@ namespace CatalogoWeb.Infrastructure.Context
             //LogradouroCidade = new LogradouroCidadeRepository(Context, mapper);
             Marcas = new MarcaRepository(Context, mapper);
             Ncm = new NcmRepository(Context, mapper);
-           // ParametrosEmpresa = new ParametrosEmpresaRepository(Context, mapper);
+            // ParametrosEmpresa = new ParametrosEmpresaRepository(Context, mapper);
             //ParametrosLocal = new ParametrosLocalRepository(Context, mapper);
-           // Pessoa = new PessoaRepository(Context, mapper);
-           // PessoaFisica = new PessoaFisicaRepository(Context, mapper);
-//PessoaJuridica = new PessoaJuridicaRepository(Context, mapper);
-           // PessoaEmail = new PessoaEmailRepository(Context, mapper);
+            // Pessoa = new PessoaRepository(Context, mapper);
+            // PessoaFisica = new PessoaFisicaRepository(Context, mapper);
+            //PessoaJuridica = new PessoaJuridicaRepository(Context, mapper);
+            // PessoaEmail = new PessoaEmailRepository(Context, mapper);
             //PessoaTelefone = new PessoaTelefoneRepository(Context, mapper);
             //PessoaEndereco = new PessoaEnderecoRepository(Context, mapper);
             //Pais = new PaisRepository(Context, mapper);
             //StatusPedido = new StatusPedidoRepository(Context, mapper);
             SubGrupo = new SubGrupoRepository(Context, mapper);
-           // TipoTelefone = new TipoTelefoneRepository(Context, mapper);
+            // TipoTelefone = new TipoTelefoneRepository(Context, mapper);
             Usuarios = new UsuarioRepository(Context, mapper);
             UnidadeMedida = new UnidadeMedidaRepository(Context, mapper);
             Usuarios = new UsuarioRepository(Context, mapper);
             UnidadeMedida = new UnidadeMedidaRepository(Context, mapper);
-           // UsuarioAcesso = new UsuarioAcessoRepository(Context, mapper);
+            // UsuarioAcesso = new UsuarioAcessoRepository(Context, mapper);
             GrupoMenu = new GrupoMenuRepository(Context, mapper);
             ItemMenu = new ItemMenuRepository(Context, mapper);
             ModalidadeGrade = new ModalidadeGradeRepository(Context, mapper);
-           // Vendedor = new VendedorRepository(Context, mapper);
-           // TipoEndereco = new TipoEnderecoRepository(Context, mapper);
+            // Vendedor = new VendedorRepository(Context, mapper);
+            // TipoEndereco = new TipoEnderecoRepository(Context, mapper);
             Produto = new ProdutoRepository(Context, mapper);
             ProdutoEstoque = new ProdutoEstoqueRepository(Context, mapper);
             ProdutoGrade = new ProdutoGradeRepository(Context, mapper);
             ListaPreco = new ListaPrecoRepository(Context, mapper);
             ListaPrecoItem = new ListaPrecoItemRepository(Context, mapper);
-           // Pedido = new PedidoRepository(Context, mapper);
-           // PedidoItem = new PedidoItemRepository(Context, mapper);
+            // Pedido = new PedidoRepository(Context, mapper);
+            // PedidoItem = new PedidoItemRepository(Context, mapper);
             ModalidadeGrade = new ModalidadeGradeRepository(Context, mapper);
+            ImagemProduto = new ImagemProdutoRepository(Context, mapper);
+            ProdutosAcesso = new ProdutoAcessoRepository(Context, mapper);
+            GruposAcesso = new GrupoAcessoRespository(Context, mapper);
         }
 
         public async Task CommitAsync()

@@ -8,5 +8,7 @@ namespace CatalogoWeb.Domain.Abstractions.Services
         Task<PagedModel<ProdutoGradeDTO>> ListaProdutoComGradeFiltro(FiltrosGerais filtros, PagedParams paginacao);
         Task<PagedModel<ProdutoDTO>> ListarTodas(FiltrosProdutoListarTodos filtros, PagedParams paginacao);
         Task<ProdutoDTO> RetornaDadosProduto(long ProdutoId);
+        Task<bool> PopularDados(List<PopularProdutoDTO> dados);
+        Task<bool> AtualizarDadosGerados(List<PopularProdutoDTO> dados);
     }
 }

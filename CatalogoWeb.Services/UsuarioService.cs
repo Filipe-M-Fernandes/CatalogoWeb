@@ -1,10 +1,15 @@
 ﻿using AutoMapper;
+using CatalogoWeb.Core;
 using CatalogoWeb.Core.DadosUsuarioLogado;
+using CatalogoWeb.Core.Extensions;
 using CatalogoWeb.Domain.Abstractions.Services;
 using CatalogoWeb.Domain.DTO;
 using CatalogoWeb.Domain.DTO.Command.Usuario;
 using CatalogoWeb.Domain.Entidades;
+using CatalogoWeb.Domain.Entidades.Filtros;
+using CatalogoWeb.Domain.Enuns;
 using CatalogoWeb.Infrastructure;
+using System.Linq.Expressions;
 using System.Text;
 using XSystem.Security.Cryptography;
 
@@ -33,6 +38,12 @@ namespace CatalogoWeb.Services
             return _mapper.Map<UsuarioDTO>(entidade);
         }
 
+        public async Task<PagedModel<Usuario>> BuscarTodos(FiltrosUsuarios filtros, PagedParams paginacao)
+        {
+            var filtro = MontarFiltroUsuarios(filtros);
+            return await _unitOfWork.Usuarios.FindAsync(filtro, paginacao);
+        }
+
         public async Task<Usuario> BuscarAsync(long id)
         {
             return await _unitOfWork.Usuarios.GetByIdAsync(id);
@@ -58,7 +69,7 @@ namespace CatalogoWeb.Services
             return retorno;
         }
 
-       
+
 
         public async Task<string> ConfirmarTrocaSenha(string nova)
         {
@@ -246,6 +257,31 @@ namespace CatalogoWeb.Services
             await _enviaEmailService.EnviaEmail(email, "Bem vindo ao Catalogo Web!", conteudoCorpoEmail, true);
 
         }
+
+        private Expression<Func<Usuario, bool>> MontarFiltroUsuarios(FiltrosUsuarios filtros)
+        {
+            var expr = PredicateBuilder.True<Usuario>();
+            long codigoLocal = _dadosUsuarioLogado.CodigoLocal();
+            expr = expr.And(x => x.usuarioslocais.Any(l => l.loc_id == codigoLocal));
+            if (filtros.IdUser.HasValue)
+            {
+                if (filtros.IdUser.HasValue) expr = expr.And(x => x.usu_id == filtros.IdUser.Value);
+            }
+            else
+            {
+                if (filtros.Admin.HasValue) expr = expr.And(x => x.usu_admin == filtros.Admin.Value);
+                if (filtros.Ativo.HasValue) expr = expr.And(x => x.usu_ativo == filtros.Ativo.Value);
+                if (filtros.Email.HasValue()) expr = expr.And(x => x.usu_email.ToLower().Contains(filtros.Email.ToLower()));
+                if (filtros.Nome.HasValue()) expr = expr.And(x => x.usu_nome.ToLower().Contains(filtros.Nome.ToLower()));
+                if (filtros.Filtro.HasValue()) expr = expr.And(
+                    u => Convert.ToString(u.usu_id) == filtros.Filtro ||
+                    u.usu_nome.Contains(filtros.Filtro) ||
+                    u.usu_email.Contains(filtros.Filtro));
+
+            }
+            return expr;
+        }
+
 
     }
 }

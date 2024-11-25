@@ -11,16 +11,10 @@ public class ProdutoMap : IEntityTypeConfiguration<Produto>
         builder.ToTable("produto");
         builder.HasKey(e => e.pro_id);
 
-        builder.Property(e => e.cei_id).HasMaxLength(3);
-        builder.Property(e => e.orm_id).IsRequired().HasMaxLength(5);
-        builder.Property(e => e.pro_codigoetiqueta).HasMaxLength(20);
         builder.Property(e => e.pro_descricao).HasMaxLength(120);
         builder.Property(e => e.pro_ean).HasMaxLength(20);
-        builder.Property(e => e.pro_fci).HasMaxLength(36);
-        builder.Property(e => e.pro_modelo).HasMaxLength(50);
         builder.Property(e => e.pro_observacao).HasMaxLength(500);
         builder.Property(e => e.pro_referencia).HasMaxLength(50);
-        builder.Property(e => e.tpi_id).HasMaxLength(5);
         builder.Property(e => e.ump_id).IsRequired().HasMaxLength(10);
         builder.Property(e => e.pro_pesobruto).HasPrecision(18, 4);
         builder.Property(e => e.pro_pesoliquido).HasPrecision(18, 4);

@@ -9,7 +9,6 @@ namespace CatalogoWeb.Domain.Entidades
         public string ump_id { get; set; }
         public decimal pru_quantidade { get; set; }
         public decimal pru_qtdeunidadepadrao { get; set; }
-        public DateTime? data_sincro { get; set; }
         [JsonIgnore]
         public virtual Produto produto { get; set; }
         [JsonIgnore]

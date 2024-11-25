@@ -14,7 +14,6 @@ public class ListaPrecoMap : IEntityTypeConfiguration<ListaPreco>
         builder.Property(l => l.ltp_nome).IsRequired().HasMaxLength(50);
         builder.Property(l => l.ltp_principal).IsRequired();
         builder.Property(l => l.ltp_ativa).IsRequired();
-        builder.Property(l => l.ltp_consideradescontopgto).IsRequired();
 
         builder.HasOne(d => d.empresa)
             .WithMany(p => p.listaprecos)

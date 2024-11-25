@@ -11,9 +11,7 @@ namespace CatalogoWeb.Domain.Entidades
         public DateTime? ltp_datainicial { get; set; }
         public DateTime? ltp_datafinal { get; set; }
         public bool ltp_principal { get; set; }
-        public bool ltp_consideradescontopgto { get; set; }
         public bool ltp_ativa { get; set; }
-        public DateTime? data_sincro { get; set; }
         [JsonIgnore]
         public virtual Empresa empresa { get; set; }
         [JsonIgnore]
