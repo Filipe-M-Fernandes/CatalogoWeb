@@ -6,7 +6,9 @@ namespace CatalogoWeb.Domain.DTO
     {
 
         public long pro_id { get; set; }
+        public long sgp_id { get; set; }
         public string sgp_nome { get; set; }
+        public long gru_id { get; set; }
         public string gru_nome { get; set; }
         public string mar_nome { get; set; }
         public string ump_id { get; set; }
@@ -25,16 +27,15 @@ namespace CatalogoWeb.Domain.DTO
         public bool pro_ativo { get; set; }
         public decimal? valorvenda { get; set; }
         public bool pro_usagrade { get; set; }
+        public decimal? estoque { get; set; }
         public DateTime? pro_datainclusao { get; set; }
         public string? imagem { get; set; }
         public List<ListaPrecoItem> listaPreco { get; set; }
-        public List<ProdutoEstoque> produtoEstoque { get; set; }
         public List<ProdutoGradeDTO> produtoGrade { get; set; }
 
         public ProdutoDTO()
         {
             this.listaPreco = new List<ListaPrecoItem>();
-            this.produtoEstoque = new List<ProdutoEstoque>();
             this.produtoGrade = new List<ProdutoGradeDTO>();
         }
 

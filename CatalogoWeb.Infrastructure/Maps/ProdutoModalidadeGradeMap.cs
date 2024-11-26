@@ -22,9 +22,5 @@ public class ProdutoModalidadeGradeMap : IEntityTypeConfiguration<ProdutoModalid
         builder.HasOne(ul => ul.modalidadegrade)
             .WithMany(u => u.produtomodalidadegrade)
             .HasForeignKey(ul => ul.mgp_id);
-
-        builder.HasOne(ul => ul.produtograde)
-            .WithMany(u => u.produtomodalidadegrade)
-            .HasForeignKey(ul => ul.prg_id);
     }
 }

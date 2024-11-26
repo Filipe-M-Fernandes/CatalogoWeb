@@ -135,7 +135,7 @@ namespace CatalogoWeb.Services
 
             string sql = $@"
                         SELECT DISTINCT pro.pro_id, pro.pro_descricao, pro.pro_datainclusao, sgp.sgp_id, sgp.sgp_nome, grp.gru_id, grp.gru_nome,
-		                     mar.mar_id, mar.mar_nome, ncm.ncm_id, ncm.ncm_descricao, ncm.ncm_codigo, ump.ump_id, ump.ump_descricao,
+		                     mar.mar_id, mar.mar_nome, ncm.ncm_id, ncm.ncm_descricao, ncm.ncm_codigo, ump.ump_id, ump.ump_descricao,get_estoque(pro.pro_id,null) as estoque,
 		                     ump.ump_casasdecimais, pro.pro_codigo, pro.pro_ean, pro.pro_referencia,pro.pro_descricaodetalhada, pro.pro_descricaoresumida,
 		                     pro.pro_referencia, pro.pro_produto,pro.pro_ativo, pro.pro_observacao, pro.cen_id,pro.pro_usagrade, coalesce(imp.imp_imagem, '') as imagem,
                              coalesce(get_valor_promocao(pro.pro_id),0) as valorPromocao, coalesce(get_valor_produto(pro.pro_id),0) as valorVenda
@@ -145,8 +145,8 @@ namespace CatalogoWeb.Services
                         LEFT JOIN ncm ON(pro.ncm_id = ncm.ncm_id)
                         LEFT JOIN unidademedida ump ON(pro.ump_id = ump.ump_id)
                         LEFT JOIN grupo grp ON(grp.gru_id = pro.gru_id)
-                        LEFT JOIN produtograde prg ON(prg.pro_id = pro.pro_id)
                         LEFT JOIN imagemproduto imp on (imp.pro_id = pro.pro_id)
+                        LEFT JOIN produtoestoque est on (est.pro_id = pro.pro_id)
                         WHERE pro.emp_id = @CodigoEmpresa ";
             if (!string.IsNullOrEmpty(filtros.Filtro))
             {
@@ -263,7 +263,6 @@ namespace CatalogoWeb.Services
                         LEFT JOIN ncm ON(pro.ncm_id = ncm.ncm_id)
                         LEFT JOIN unidademedida ump ON(pro.ump_id = ump.ump_id)
                         LEFT JOIN grupo grp ON(grp.gru_id = pro.gru_id)
-                        LEFT JOIN produtograde prg ON(prg.pro_id = pro.pro_id)
                         WHERE pro.emp_id = @CodigoEmpresa ";
             if (!string.IsNullOrEmpty(filtros.Filtro))
             {
