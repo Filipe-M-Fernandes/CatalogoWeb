@@ -35,5 +35,6 @@ namespace CatalogoWeb.Services
             await _unitOfWork.ImagemProduto.AddAsync(imp);
         }
 
+
     }
 }

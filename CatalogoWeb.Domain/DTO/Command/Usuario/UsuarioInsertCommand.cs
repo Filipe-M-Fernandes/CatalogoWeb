@@ -2,6 +2,6 @@
 {
     public class UsuarioInsertCommand : UsuarioCommand
     {
-        public bool mudarAcesso { get; set; }
+       
     }
 }

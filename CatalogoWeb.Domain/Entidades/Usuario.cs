@@ -6,7 +6,7 @@ namespace CatalogoWeb.Domain.Entidades
     {
         public long usu_id { get; set; }
         public string usu_email { get; set; }
-        public string usu_senha { get; set; }
+        public string? usu_senha { get; set; }
         public string usu_nome { get; set; }
         public DateTime usu_datainclusao { get; set; }
         public bool usu_ativo { get; set; }

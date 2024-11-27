@@ -20,7 +20,6 @@ public class UsuarioRepository : RepositoryBase<Usuario, long>, IUsuarioReposito
             return await AddAsync(entity);
 
         Mapper.Map(entity, dadosExistentes);
-
         return true;
     }
     public override async Task<bool> UpsertAsNoTrakingAsync(Usuario entity)

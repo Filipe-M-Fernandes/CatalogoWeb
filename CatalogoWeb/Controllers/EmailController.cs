@@ -29,5 +29,12 @@ namespace CatalogoWeb.Api.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex);
             }
         }
+
+        [AllowAnonymous]
+        [HttpGet("BuscarLogo")]
+        public async Task<ActionResult<string>> BuscarLogo()
+        {
+            return "https://drive.google.com/uc?id=1VT4dOopp6g5evI9XvdcXBdn16RwY97lc";
+        }
     }
 }

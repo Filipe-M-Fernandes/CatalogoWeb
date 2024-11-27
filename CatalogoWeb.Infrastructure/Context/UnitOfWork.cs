@@ -53,6 +53,7 @@ namespace CatalogoWeb.Infrastructure.Context
         public IImagemProdutoRepository ImagemProduto { get; private set; }
         public IProdutosAcessoRepository ProdutosAcesso { get; private set; }
         public IGruposAcessoRepository GruposAcesso { get; private set; }
+        public IUsuariosLocaisRepository UsuariosLocais { get; private set; }
         public UnitOfWork(CatalogoDbContext context, IMapper mapper)
         {
             Context = context;
@@ -101,6 +102,7 @@ namespace CatalogoWeb.Infrastructure.Context
             ImagemProduto = new ImagemProdutoRepository(Context, mapper);
             ProdutosAcesso = new ProdutoAcessoRepository(Context, mapper);
             GruposAcesso = new GrupoAcessoRespository(Context, mapper);
+            UsuariosLocais = new UsuariosLocaisRepository(Context, mapper);
         }
 
         public async Task CommitAsync()

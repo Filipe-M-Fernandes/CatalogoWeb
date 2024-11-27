@@ -28,6 +28,7 @@ namespace CatalogoWeb.Infrastructure
         IImagemProdutoRepository ImagemProduto { get; }
         IGruposAcessoRepository GruposAcesso { get; }
         IProdutosAcessoRepository ProdutosAcesso { get; }
+        IUsuariosLocaisRepository UsuariosLocais { get; }
         Task CommitAsync();
     }
 }

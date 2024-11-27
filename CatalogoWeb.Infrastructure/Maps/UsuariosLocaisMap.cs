@@ -23,9 +23,6 @@ namespace CatalogoWeb.Infrastructure.Maps
                 .WithMany(x => x.usuarioslocais)
                 .HasForeignKey(c => c.loc_id);
 
-            builder.HasOne(u => u.usuarios)
-                .WithMany(y => y.usuarioslocais)
-                .HasForeignKey(d => d.usu_id);
         }
     }
 }

@@ -25,8 +25,8 @@ namespace CatalogoWeb.Services
         {
             try
             {
-                var a = await _unitOfWork.ProdutoGrade.FindAsync(p => p.pro_id == produtoId);
-                return (a).ToList();
+
+                return (await _unitOfWork.ProdutoGrade.FindAsync(p => p.pro_id == produtoId)).ToList();
 
             }
             catch (Exception ex)

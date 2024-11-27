@@ -48,10 +48,10 @@ namespace CatalogoWeb.Services
                 await _unitOfWork.ProdutosAcesso.UpsertAsync(proAcesso);
             }
             await _unitOfWork.CommitAsync();
-            await AcessoGrupo( (long)prod.gru_id);
+            await AcessoGrupo((long)prod.gru_id);
         }
 
-        public async Task AcessoGrupo( long grupoId)
+        public async Task AcessoGrupo(long grupoId)
         {
             int empId = _dadosUsuarioLogado.CodigoEmpresa();
             GruposAcesso gruAcesso = new GruposAcesso();
