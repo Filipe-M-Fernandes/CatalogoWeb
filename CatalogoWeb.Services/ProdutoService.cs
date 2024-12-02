@@ -150,7 +150,7 @@ namespace CatalogoWeb.Services
                         WHERE pro.emp_id = @CodigoEmpresa ";
             if (!string.IsNullOrEmpty(filtros.Filtro))
             {
-                sql += " AND (pro.pro_descricao ilike @Filtro OR pro.pro_modelo ilike @Filtro OR pro.pro_referencia ilike @Filtro OR prg.prg_codigoetiqueta ilike @Filtro ";
+                sql += " AND (pro.pro_descricao ilike @Filtro OR pro.pro_referencia ilike @Filtro ";
                 if (!string.IsNullOrEmpty(TextoHelper.RetornaNumeros(filtros.Filtro)) && TextoHelper.RetornaLetras(filtros.Filtro).Length == 0)
                 {
                     sql += @" OR pro.pro_codigo = @FiltroNum";
@@ -266,12 +266,12 @@ namespace CatalogoWeb.Services
                         WHERE pro.emp_id = @CodigoEmpresa ";
             if (!string.IsNullOrEmpty(filtros.Filtro))
             {
-                sql += " AND (pro.pro_descricao ilike @Filtro OR pro.pro_modelo ilike @Filtro OR OR pro.pro_referencia ilike @Filtro ";
+                sql += " AND (pro.pro_descricao ilike @Filtro OR pro.pro_referencia ilike @Filtro ";
                 if (!string.IsNullOrEmpty(TextoHelper.RetornaNumeros(filtros.Filtro)) && TextoHelper.RetornaLetras(filtros.Filtro).Length == 0)
                 {
                     sql += @" OR pro.pro_codigo = @FiltroNum";
                     if (TextoHelper.RetornaNumeros(filtros.Filtro).Length > 4)
-                        sql += @" OR pro.pro_ean ilike @FiltroNumIlike OR prg.prg_ean ilike @FiltroNumIlike ";
+                        sql += @" OR pro.pro_ean ilike @FiltroNumIlike";
                 }
                 sql += ")";
             }
