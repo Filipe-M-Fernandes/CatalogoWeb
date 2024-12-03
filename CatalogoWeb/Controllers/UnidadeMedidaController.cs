@@ -1,9 +1,5 @@
-﻿using CatalogoWeb.Core.DadosUsuarioLogado;
-using CatalogoWeb.Domain.Abstractions.Services;
-using CatalogoWeb.Domain.DTO;
-using CatalogoWeb.Domain.Entidades.Filtros;
+﻿using CatalogoWeb.Domain.Abstractions.Services;
 using CatalogoWeb.Domain.Entidades;
-using CatalogoWeb.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 

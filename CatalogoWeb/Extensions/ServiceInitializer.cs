@@ -61,6 +61,9 @@ namespace CatalogoWeb.Api.Extensions
             services.TryAddScoped<IAcessosService, AcessosService>();
             services.TryAddScoped<IProdutoGradeService, ProdutoGradeService>();
             services.TryAddScoped<IUnidadeMedidaService, UnidadeMedidaService>();
+            services.TryAddScoped<IListaPrecoService, ListaPrecoService>();
+            services.TryAddScoped<IListaPrecoItemService, ListaPrecoItemService>();
+
         }
 
         private static void RegistrarAutoMapper(IServiceCollection services)

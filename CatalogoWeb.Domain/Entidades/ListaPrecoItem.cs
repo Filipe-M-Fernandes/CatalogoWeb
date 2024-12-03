@@ -9,7 +9,6 @@ namespace CatalogoWeb.Domain.Entidades
         public long pro_id { get; set; }
         public decimal lpi_valorvenda { get; set; }
         public long? prg_id { get; set; }
-        [JsonIgnore]
         public virtual ListaPreco listapreco { get; set; }
         [JsonIgnore]
         public virtual ProdutoGrade produtograde { get; set; }

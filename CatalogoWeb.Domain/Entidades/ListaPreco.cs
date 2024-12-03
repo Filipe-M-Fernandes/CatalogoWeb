@@ -3,7 +3,7 @@
 namespace CatalogoWeb.Domain.Entidades
 {
     public class ListaPreco
-    { 
+    {
         public long ltp_id { get; set; }
         public int emp_id { get; set; }
         public long? loc_id { get; set; }
@@ -12,6 +12,7 @@ namespace CatalogoWeb.Domain.Entidades
         public DateTime? ltp_datafinal { get; set; }
         public bool ltp_principal { get; set; }
         public bool ltp_ativa { get; set; }
+        public bool ltp_promocao { get; set; }
         [JsonIgnore]
         public virtual Empresa empresa { get; set; }
         [JsonIgnore]
